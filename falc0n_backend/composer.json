@@ -1,0 +1,9 @@
+{
+    "require": {
+        "firebase/php-jwt": "^5.2",
+        "vlucas/phpdotenv": "^5.3",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "automattic/woocommerce": "^3.0"
+    }
+}
