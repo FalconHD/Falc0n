@@ -30,9 +30,9 @@ export function Stores() {
                     {orders.length > 0
                         ?
                         orders.map(order => (
-                            <div>
-                                <img src={order.images[0].src} style={{ width: "300px", height: "300px" }} />
-                                <h3>{order.name}</h3>
+                            <div key={order.id}>
+                                <img src={order.images[0].src} style={{ width: "200px", height: "200px" }} /><br />
+                                <small>{order.name}</small>
                             </div>
                         ))
                         : <h5>waiting for products</h5>
