@@ -46,6 +46,9 @@ export function Sidebar() {
         sidebar.show.payload ? document.querySelector('.app-left').classList.add('show') : document.querySelector('.app-left').classList.remove('show')
     }, [sidebar.show]);
 
+
+
+
     return (
         <div className="app-left">
             <button className="close-menu" onClick={() => dispatch(setActive(false))}>

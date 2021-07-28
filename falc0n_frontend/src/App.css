@@ -52,7 +52,7 @@ body {
 }
 
 .app-left {
-  flex-basis: 240px;
+  min-width: 240px;
   background-color: var(--app-bg-dark);
   height: 100%;
   overflow-y: auto;
@@ -309,6 +309,7 @@ button {
   padding: 16px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .chart-container.storeButton:hover {
@@ -354,9 +355,9 @@ button {
 
 .chart-svg {
   position: relative;
-  max-width: 90px;
-  min-width: 40px;
-  flex: 1;
+  /* max-width: 90px;
+  min-width: 40px; */
+  /* flex: 1; */
   color: var(--draft-icon);
 }
 
@@ -609,6 +610,12 @@ button {
   box-shadow: 0 0 0 2px var(--app-bg-dark);
 }
 
+.notification-active:hover {
+  border-radius: 100%;  
+  cursor: pointer;
+  color: var(--draft-icon);
+}
+
 .stores-pages {
   width: 100%;
   display: flex;
@@ -749,15 +756,7 @@ button {
   cursor: pointer;
 }
 
-@media screen and (max-width: 1350px) {
-  .app-right {
-    flex-basis: 240px;
-    width: 240px;
-  }
-  .app-left {
-    flex-basis: 200px;
-  }
-}
+@media screen and (max-width: 1350px) {}
 
 @media screen and (max-width: 1200px) {
   .app-right {
@@ -836,8 +835,8 @@ button {
     width: 100%;
   }
   .chart-svg {
-    min-height: 60px;
-    min-width: 40px;
+    /* min-height: 60px;
+    min-width: 40px; */
   }
 }
 

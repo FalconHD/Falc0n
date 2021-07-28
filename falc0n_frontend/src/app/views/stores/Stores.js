@@ -20,13 +20,14 @@ export function Stores() {
         setOrders(stores.selectedStore.orders)
     }, [stores.selectedStore])
 
+
+  
+
     return (
         <div class="stores-pages">
             <div className="app-main">
                 <TopHeader />
-
                 <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
-
                     {orders.length > 0
                         ?
                         orders.map(order => (
