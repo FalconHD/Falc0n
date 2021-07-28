@@ -1,32 +1,11 @@
 import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
-import {
-    select
-} from '../views/stores/storesSlice';
-
 
 export function StoreButton(props) {
 
-    const stores = useSelector(state => state.stores)
-    const dispatch = useDispatch();
-
-    const getOrders = async (id) => {
-        let response = await fetch(`http://localhost/falc0n/store/getProducts/${id}`, {
-            method: "GET",
-            headers: {
-                'Content-type': "application/json"
-            }
-        })
-        let result = await response.json()
-        dispatch(select({store:props.store,orders:result}))
-    }
-    useEffect(() => {
-        console.log(props);
-    })
 
 
     return (
-        <div className="chart-container-wrapper" onClick={() => getOrders(props.store.id)}>
+        <div className="chart-container-wrapper" onClick={() => props.getOrders()}>
             <div className="chart-container storeButton">
                 <div className="chart-svg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
@@ -41,7 +20,7 @@ export function StoreButton(props) {
                     </svg>
                 </div>
                 <div className="chart-info-wrapper">
-                    <small>{props.title} STORE</small>
+                    <small>{`${props.store.store_name}`.toUpperCase()} STORE</small>
                 </div>
                 <div className="chart-svg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

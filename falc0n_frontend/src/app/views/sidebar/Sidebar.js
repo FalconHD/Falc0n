@@ -39,7 +39,7 @@ export function Sidebar() {
     useEffect(() => {
         let idx = pages.indexOf(`${location.pathname.split('/').join('').toLocaleUpperCase()}`)
         console.log(idx);
-        idx > 0 ? handleActive(idx+1) : handleActive(1)
+        idx > 0 ? handleActive(idx + 1) : handleActive(1)
     }, []);
 
     useEffect(() => {

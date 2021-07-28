@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { StoreButton } from './StoreButton'
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    select
+} from '../views/stores/storesSlice';
+
 
 
 export function RightSidebar() {
-    const [stores, setStores] = useState([])
+    const [mystores, setStores] = useState([])
 
-  
+    const stores = useSelector(state => state.stores)
+    const dispatch = useDispatch();
+
+    const getOrders = async (store) => {
+        let response = await fetch(`http://localhost/falc0n/store/getProducts/${store.id}`, {
+            method: "GET",
+            headers: {
+                'Content-type': "application/json"
+            }
+        })
+        let result = await response.json()
+        dispatch(select({ store: store, orders: result }))
+    }
+
+
     const getStores = async () => {
         let response = await fetch(`http://localhost/falc0n/store/stores`, {
             method: "GET",
@@ -15,6 +34,7 @@ export function RightSidebar() {
         })
         let result = await response.json()
         setStores(result)
+        getOrders(result[0])
     }
 
     useEffect(() => {
@@ -57,9 +77,8 @@ export function RightSidebar() {
                         </div>
                         <div className="">
                             {
-                                // getOrders={() => getOrders(store.id)}
-                                stores.map(store => (
-                                    <StoreButton store={store} title={`${store.store_name}`.toUpperCase()} key={store.id} />
+                                mystores.map(store => (
+                                    <StoreButton getOrders={() => getOrders(store)} store={store} key={store.id} />
                                 ))
                             }
                         </div>

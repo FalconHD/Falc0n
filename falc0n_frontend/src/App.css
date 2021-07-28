@@ -861,19 +861,20 @@ button {
 /* STORES PAGE STYLES */
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
   border-radius: 10px;
+  background-color: var(--app-bg-light);
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  background-color: #F5F5F5;
+  width: 2px;
+  background-color: var(--app-bg-light);
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgba(221, 129, 8, 0.6)), color-stop(0.72, rgba(0, 199, 214, 0.1)), color-stop(0.86, rgba(0, 199, 214, 0)));
+  background-color: var(--app-logo);
+  background-image: -webkit-linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4) 50%, transparent, transparent)
 }
 
 /* END STORES PAGE STYLES */
