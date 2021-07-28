@@ -24,7 +24,7 @@ function App() {
             <Stores />
           </Route>
         </Switch>
-
+        
       </div>
     </Router>
   );

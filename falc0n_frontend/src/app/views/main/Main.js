@@ -138,7 +138,7 @@ export function Main() {
 
     return (
         <div className="app-main">
-            <TopHeader/>
+            <TopHeader />
             <div className="chart-row three">
                 <Persentager title={"revenue"} revenue={20} persentage={"70"} color={"pink"} />
                 <Persentager title={"total"} revenue={5.5} persentage={"40"} color={"blue"} />

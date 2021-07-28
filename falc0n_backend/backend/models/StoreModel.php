@@ -69,7 +69,6 @@ class StoreModel
 
     public function getStoreById($id)
     {
-
         try {
             $this->db->query("SELECT * FROM store WHERE id=:id");
             $this->db->bind(':id', $id);
