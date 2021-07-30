@@ -5,14 +5,47 @@ import {
     select,
     rightSetActive,
 } from '../views/stores/storesSlice';
+import { TextField, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useLocation } from 'react-router-dom';
 
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        color: 'white',
+        width: '100%',
+    },
+    input: {
+        color: 'white',
+        width: '100%',
+        backgroundColor: '#151c32',
+        fontSize: '13px',
+    },
+    label: {
+        color: '#dd8108',
+        fontSize: '13px',
+        width: '100%'
+    },
+    button: {
+        backgroundColor: '#dd8108',
+        color: '#151c32',
+        '&:hover': {
+            backgroundColor: '#a8885e',
+            boxShadow: 'none',
+        },
+    }
+
+}));
 
 export function RightSidebar() {
+    const [addActivated, setAddActivated] = useState(true)
     const [mystores, setStores] = useState([])
+    const [addStore, setAddStore] = useState({})
 
     const stores = useSelector(state => state.stores)
     const dispatch = useDispatch();
+
+    const location = useLocation()
 
     const getOrders = async (store) => {
         let response = await fetch(`http://localhost/falc0n/store/getProducts/${store.id}`, {
@@ -24,6 +57,9 @@ export function RightSidebar() {
         let result = await response.json()
         dispatch(select({ store: store, orders: result }))
     }
+    const classes = useStyles();
+
+
 
 
     const getStores = async () => {
@@ -45,6 +81,33 @@ export function RightSidebar() {
         if (!yes) {
             getOrders(result[0])
         }
+    }
+
+    const connect = async () => {
+        let owner = 1
+        let newStore = {
+            store_name: addStore.name,
+            url: addStore.url,
+            owner
+        }
+        console.log(newStore);
+
+        let response = await fetch('http://localhost/falc0n/store/add', {
+            method: "POST",
+            headers: {
+                'Content-type': "application/json"
+            },
+            body: JSON.stringify(newStore)
+        })
+        let result = await response.json()
+        response = await fetch(`http://localhost/falc0n/store/connect/${result.id}`, {
+            method: "GET",
+            headers: {
+                'Content-type': "application/json"
+            }
+        })
+        let { url } = await response.json()
+        window.location.href = url
     }
 
     useEffect(() => {
@@ -79,16 +142,27 @@ export function RightSidebar() {
                 <div class="app-right-content">
                     <div class="app-right-section">
                         <div class="app-right-section-header">
-                            <h2>MY STORES :</h2>
-                            <span class="notification-active">
+
+                            <span className="my-stores-button" onClick={() => setAddActivated(true)}><h2>MY STORES</h2></span>
+                            <span class="notification-active" onClick={() => setAddActivated(false)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                             </span>
                         </div>
                         <div className="">
                             {
-                                mystores.map(store => (
-                                    <StoreButton getOrders={() => getOrders(store)} store={store} key={store.id} />
-                                ))
+                                addActivated
+                                    ? mystores.map(store => (
+                                        <StoreButton getOrders={() => getOrders(store)} store={store} key={store.id} />
+                                    ))
+                                    :
+                                    <div className="link-store-form">
+                                        <small>LINK NEW STORE :</small>
+                                        <TextField fullWidth InputProps={{ className: classes.input }} InputLabelProps={{ className: classes.label }} id="filled-basic" label="NAME" variant="filled" onChange={(e) => setAddStore({ ...addStore, name: e.target.value })} />
+                                        <TextField fullWidth InputProps={{ className: classes.input }} InputLabelProps={{ className: classes.label }} id="filled-basic" label="URL" variant="filled" onChange={(e) => setAddStore({ ...addStore, url: e.target.value })} />
+                                        <Button fullWidth variant="contained" color="primary" href="#contained-buttons" className={classes.button} onClick={() => connect()}>
+                                            Link
+                                        </Button>
+                                    </div>
                             }
                         </div>
                     </div>

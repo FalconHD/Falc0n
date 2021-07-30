@@ -5,8 +5,16 @@
 
 :root {
   --app-bg-dark: #01081f;
-  --app-bg-before: linear-gradient( 180deg, rgba(1, 8, 31, 0) 0%, rgba(1, 8, 31, 1) 100%);
-  --app-bg-before-2: linear-gradient( 0deg, rgba(1, 8, 31, 0) 0%, rgba(1, 8, 31, 1) 100%);
+  --app-bg-before: linear-gradient(
+    180deg,
+    rgba(1, 8, 31, 0) 0%,
+    rgba(1, 8, 31, 1) 100%
+  );
+  --app-bg-before-2: linear-gradient(
+    0deg,
+    rgba(1, 8, 31, 0) 0%,
+    rgba(1, 8, 31, 1) 100%
+  );
   --app-bg-light: #151c32;
   --app-logo: #dd8108;
   --nav-link: #5e6a81;
@@ -73,12 +81,16 @@ body {
   overflow-x: hidden;
   background-color: var(--app-bg-light);
   padding: 24px;
-  background: radial-gradient( circle, rgba(223, 102, 3, 0.37) 1%, rgba(5, 19, 64, 1) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(223, 102, 3, 0.37) 1%,
+    rgba(5, 19, 64, 1) 100%
+  );
 }
 
 .app-right {
-  flex-basis: 320px;
-  width: 320px;
+  flex-basis: 280px;
+  width: 280px;
   background-color: var(--app-bg-dark);
   height: 100%;
   padding: 64px 0 0 0;
@@ -248,7 +260,8 @@ button {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.main-header-line input:hover, .main-header-line input:focus {
+.main-header-line input:hover,
+.main-header-line input:focus {
   border: 1px solid #3481d2;
   box-shadow: 0 0 0 3px var(--color-light);
 }
@@ -272,6 +285,18 @@ button {
   max-width: 77.7%;
 }
 
+.store-chart {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.store-chart .big {
+  width: 90%;
+}
+.store-chart .big .chart-container {
+  flex-direction: column;
+}
 .chart-row.two .big .chart-container {
   flex-direction: column;
 }
@@ -284,7 +309,7 @@ button {
   flex-direction: column;
 }
 
-.chart-row.two .small .chart-container+.chart-container {
+.chart-row.two .small .chart-container + .chart-container {
   margin-top: 16px;
 }
 
@@ -293,6 +318,13 @@ button {
   margin-top: 24px;
 }
 
+.bar-chart {
+  width: 100%;
+  margin: 10px 24px;
+}
+.bar-chart #chart {
+  /* min-height: 200px !important; */
+}
 .chart-container {
   width: 100%;
   border-radius: 10px;
@@ -320,7 +352,7 @@ button {
   display: flex;
   align-items: center;
   cursor: pointer;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .chart-container.applicants {
@@ -355,9 +387,9 @@ button {
 
 .chart-svg {
   position: relative;
-  /* max-width: 90px;
-  min-width: 40px; */
-  /* flex: 1; */
+  max-width: 90px;
+  min-width: 40px;
+  flex: 1;
   color: var(--draft-icon);
 }
 
@@ -390,12 +422,12 @@ button {
   stroke: #557b88;
 }
 
-.circular-chart.pink .circle {
-  stroke: #ff7dcb;
+.circular-chart.red .circle {
+  stroke: #f02c12;
 }
 
-.circular-chart.pink .circle-bg {
-  stroke: #6f5684;
+.circular-chart.red .circle-bg {
+  stroke: #b18e83;
 }
 
 .percentage {
@@ -566,7 +598,8 @@ button {
   object-fit: cover;
 }
 
-.profile-text, .profile-subtext {
+.profile-text,
+.profile-subtext {
   font-size: 12px;
   line-height: 16px;
   color: var(--secondary-color);
@@ -610,8 +643,27 @@ button {
   box-shadow: 0 0 0 2px var(--app-bg-dark);
 }
 
+.my-stores-button h2:hover {
+  cursor: pointer;
+  color: var(--draft-icon);
+}
+
+.link-store-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--main-color);
+  gap:10px;
+  padding:10px
+}
+
+.link-store-form small {
+  align-self: center;
+}
+
 .notification-active:hover {
-  border-radius: 100%;  
+  border-radius: 100%;
   cursor: pointer;
   color: var(--draft-icon);
 }
@@ -756,7 +808,8 @@ button {
   cursor: pointer;
 }
 
-@media screen and (max-width: 1350px) {}
+@media screen and (max-width: 1350px) {
+}
 
 @media screen and (max-width: 1200px) {
   .app-right {
@@ -834,9 +887,10 @@ button {
   .chart-row.three .chart-container-wrapper {
     width: 100%;
   }
+
   .chart-svg {
-    /* min-height: 60px;
-    min-width: 40px; */
+    min-height: 60px;
+    min-width: 40px;
   }
 }
 
@@ -852,6 +906,12 @@ button {
   }
   .main-header-line h1 {
     font-size: 14px;
+  }
+  .store-chart .big {
+    width: 100%;
+  }
+  .bar-chart {
+    margin: 0;
   }
 }
 
@@ -871,7 +931,13 @@ button {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: var(--app-logo);
-  background-image: -webkit-linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4) 50%, transparent, transparent)
+  background-image: -webkit-linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 0, 0, 0.4) 50%,
+    transparent,
+    transparent
+  );
 }
 
 /* END STORES PAGE STYLES */

@@ -20,9 +20,10 @@ export function Sidebar() {
     const [pages, setPages] = useState([
         "DASHBOARD",
         "STORES",
+        "SALES",
         "POSTS",
-        "PROFIL",
-        "SALES"
+        "PROFIL"
+        
     ])
 
     const handleActive = (idx) => {
@@ -97,34 +98,6 @@ export function Sidebar() {
                     </Link>
                 </li>
                 <li onClick={() => { handleActive(3) }} className="nav-list-item">
-                    <Link to="/posts">
-                        <a className="nav-list-link" >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                className="feather feather-file">
-                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                                <polyline points="13 2 13 9 20 9" />
-                            </svg>
-                            Posts
-                        </a>
-                    </Link>
-                </li>
-                <li onClick={() => { handleActive(4) }} className="nav-list-item">
-                    <Link to="/profil">
-                        <a className="nav-list-link" >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                className="feather feather-users">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                            Profil
-                        </a>
-                    </Link>
-                </li>
-                <li onClick={() => { handleActive(5) }} className="nav-list-item">
                     <Link to="/sales">
                         <a className="nav-list-link" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -133,10 +106,38 @@ export function Sidebar() {
                                 <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
                                 <path d="M22 12A10 10 0 0 0 12 2v10z" />
                             </svg>
-                            SALES
+                            Sales
                         </a>
                     </Link>
                 </li>
+                <li onClick={() => { handleActive(4) }} className="nav-list-item">
+                    <Link to="/posts">
+                        <a className="nav-list-link" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6">
+                                </line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3"
+                                    y1="6" x2="3.01" y2="6">
+                                </line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                            Posts
+                        </a>
+                    </Link>
+                </li>
+                <li onClick={() => { handleActive(5) }} className="nav-list-item">
+                    <Link to="/profil">
+                        <a className="nav-list-link" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-user">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
+                                </path>
+                                <circle cx="12" cy="7" r="4">
+                                </circle>
+                            </svg>
+                            Profil
+                        </a>
+                    </Link>
+                </li>
+
             </ul>
         </div>
     )

@@ -5,11 +5,11 @@ import TopHeader from '../../components/TopHeader'
 import { useSelector, useDispatch } from 'react-redux';
 import {
     select
-} from './storesSlice';
+} from './postsSlice';
 import Chart from 'chart.js/auto';
 
 
-export function Stores() {
+export function Posts() {
 
 
     const stores = useSelector(state => state.stores)

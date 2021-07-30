@@ -29,7 +29,7 @@ class Store extends Controller
     {
         $store = json_decode($this->data);
         extract($this->models);
-        $StoreModel->addStore($store->owner, $store->url);
+        $StoreModel->addStore($store->store_name,$store->owner, $store->url);
         $store = $StoreModel->getStoreByInfo($store->owner, $store->url);
         print_r(json_encode($store));
     }
@@ -45,10 +45,10 @@ class Store extends Controller
         extract($this->models);
         $store = $StoreModel->getStoreById($id);
         $params = array(
-            'app_name' => 'Falc0n.exe App',
+            'app_name' => 'Falc0n',
             'scope' => 'read_write', // 'read', 'write', 'read_write'
             'user_id' => $store->id,
-            'return_url' => "http://localhost:3000",
+            'return_url' => "http://localhost:3005/stores",
             'callback_url' => 'https://localhost/falc0n/store/callback', // Must be https
         );
         $query = http_build_query($params, null, '&', PHP_QUERY_RFC3986);

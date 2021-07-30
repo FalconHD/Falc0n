@@ -1,59 +1,9 @@
 import React, { useEffect } from 'react'
-import {
-    Chart,
-    ArcElement,
-    LineElement,
-    BarElement,
-    PointElement,
-    BarController,
-    BubbleController,
-    DoughnutController,
-    LineController,
-    PieController,
-    PolarAreaController,
-    RadarController,
-    ScatterController,
-    CategoryScale,
-    LinearScale,
-    LogarithmicScale,
-    RadialLinearScale,
-    TimeScale,
-    TimeSeriesScale,
-    Decimation,
-    Filler,
-    Legend,
-    Title,
-    Tooltip
-} from 'chart.js';
+import Chart from 'chart.js/auto';
 import { Persentager } from '../../components/Persentager';
 import { Progress } from '../../components/Progress';
 import TopHeader from '../../components/TopHeader';
 
-Chart.register(
-    ArcElement,
-    LineElement,
-    BarElement,
-    PointElement,
-    BarController,
-    BubbleController,
-    DoughnutController,
-    LineController,
-    PieController,
-    PolarAreaController,
-    RadarController,
-    ScatterController,
-    CategoryScale,
-    LinearScale,
-    LogarithmicScale,
-    RadialLinearScale,
-    TimeScale,
-    TimeSeriesScale,
-    Decimation,
-    Filler,
-    Legend,
-    Title,
-    Tooltip
-);
 
 
 export function Main() {
@@ -140,7 +90,7 @@ export function Main() {
         <div className="app-main">
             <TopHeader />
             <div className="chart-row three">
-                <Persentager title={"revenue"} revenue={20} persentage={"70"} color={"pink"} />
+                <Persentager title={"revenue"} revenue={20} persentage={"70"} color={"red"} />
                 <Persentager title={"total"} revenue={5.5} persentage={"40"} color={"blue"} />
                 <Persentager title={"On-hold"} revenue={10.5} persentage={"90"} color={"orange"} />
             </div>

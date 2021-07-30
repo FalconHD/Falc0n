@@ -8,6 +8,7 @@ import {
   Route,
 } from "react-router-dom";
 import './App.css';
+import { Posts } from './app/views/posts/Posts';
 
 function App() {
 
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route path="/stores">
             <Stores />
+          </Route>
+          <Route path="/posts">
+            <Posts/>
           </Route>
         </Switch>
         

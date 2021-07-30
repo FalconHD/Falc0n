@@ -31,17 +31,19 @@ class StoreModel
         return true;
     }
 
-    public function addStore($owner, $url)
+    public function addStore($store_name,$owner,$url)
     {
         try {
             $this->db->query("INSERT INTO
                 store
             SET
                 owner=:owner,
-                url=:url
+                url=:url,
+                store_name=:store_name
                 ");
             $this->db->bind(':owner', $owner);
             $this->db->bind(':url', $url);
+            $this->db->bind(':store_name', $store_name);
             $this->db->single();
         } catch (\PDOExeption$err) {
             return $err->getMessage();
