@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: '#151c32',
         fontSize: '13px',
+
+
     },
     label: {
         color: '#dd8108',
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export function RightSidebar() {
+export default function RightSidebar() {
     const [addActivated, setAddActivated] = useState(true)
     const [mystores, setStores] = useState([])
     const [addStore, setAddStore] = useState({})
@@ -55,7 +57,7 @@ export function RightSidebar() {
             }
         })
         let result = await response.json()
-        dispatch(select({ store: store, orders: result }))
+        dispatch(select({ store: store, products: result }))
     }
     const classes = useStyles();
 
@@ -72,12 +74,13 @@ export function RightSidebar() {
         let result = await response.json()
         setStores(result)
         let yes = false
-        for (let key in stores.selectedStore.orders) {
-            if (stores.selectedStore.orders.hasOwnProperty(key)) {
+        for (let key in stores.selectedStore.products) {
+            if (stores.selectedStore.products.hasOwnProperty(key)) {
                 yes = true
                 break;
             }
         }
+        console.log(yes);
         if (!yes) {
             getOrders(result[0])
         }
@@ -148,7 +151,7 @@ export function RightSidebar() {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                             </span>
                         </div>
-                        <div className="">
+                        <div className="current-stores">
                             {
                                 addActivated
                                     ? mystores.map(store => (
@@ -157,8 +160,8 @@ export function RightSidebar() {
                                     :
                                     <div className="link-store-form">
                                         <small>LINK NEW STORE :</small>
-                                        <TextField fullWidth InputProps={{ className: classes.input }} InputLabelProps={{ className: classes.label }} id="filled-basic" label="NAME" variant="filled" onChange={(e) => setAddStore({ ...addStore, name: e.target.value })} />
-                                        <TextField fullWidth InputProps={{ className: classes.input }} InputLabelProps={{ className: classes.label }} id="filled-basic" label="URL" variant="filled" onChange={(e) => setAddStore({ ...addStore, url: e.target.value })} />
+                                        <TextField fullWidth InputProps={{ className: classes.input, autoComplete: 'off' }} InputLabelProps={{ className: classes.label }} id="filled-basic" label="NAME" variant="filled" onChange={(e) => setAddStore({ ...addStore, name: e.target.value })} />
+                                        <TextField fullWidth InputProps={{ className: classes.input, autoComplete: 'off' }} InputLabelProps={{ className: classes.label }} id="filled-basic" label="URL" variant="filled" onChange={(e) => setAddStore({ ...addStore, url: e.target.value })} />
                                         <Button fullWidth variant="contained" color="primary" href="#contained-buttons" className={classes.button} onClick={() => connect()}>
                                             Link
                                         </Button>

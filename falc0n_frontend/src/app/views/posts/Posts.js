@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { RightSidebar } from '../../components/RightSidebar'
+import React, { Suspense, useEffect, useState } from 'react'
+// import { RightSidebar } from '../../components/RightSidebar'
 import { StoreButton } from '../../components/StoreButton'
 import TopHeader from '../../components/TopHeader'
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import {
     select
 } from './postsSlice';
 import Chart from 'chart.js/auto';
+const RightSidebar = React.lazy(() => import('../../components/RightSidebar'));
 
 
 export function Posts() {
@@ -15,10 +16,10 @@ export function Posts() {
     const stores = useSelector(state => state.stores)
     const dispatch = useDispatch();
 
-    const [orders, setOrders] = useState([])
+    const [products, setProducts] = useState([])
 
     useEffect(() => {
-        setOrders(stores.selectedStore.orders)
+        setProducts(stores.selectedStore.products)
     }, [stores.selectedStore])
 
 
@@ -120,9 +121,9 @@ export function Posts() {
                 </div>
 
                 <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
-                    {orders.length > 0
+                    {products
                         ?
-                        orders.map(order => (
+                        products.map(order => (
                             <div key={order.id}>
                                 <img src={order.images[0].src} style={{ width: "200px", height: "200px" }} /><br />
                                 <small>{order.name}</small>
@@ -132,7 +133,9 @@ export function Posts() {
                     }
                 </div>
             </div>
-            <RightSidebar />
+            <Suspense  fallback={<div>Loading...</div>}>
+                <RightSidebar />
+            </Suspense>
         </div>
     )
 }

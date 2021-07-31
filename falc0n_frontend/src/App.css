@@ -57,6 +57,7 @@ body {
   height: 100%;
   display: flex;
   position: relative;
+  overflow: hidden;
 }
 
 .app-left {
@@ -554,6 +555,37 @@ button {
   flex-shrink: 0;
 }
 
+.applicant-line.productImg img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 10px;
+  flex-shrink: 0;
+  box-shadow: rgba(228, 223, 223, 0.856) 0px 1px 3px, rgba(197, 191, 191, 0.829) 0px 1px 2px;
+}
+.product-activity {
+  color: rgb(151, 149, 12);
+}
+
+.product-activity svg {
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border-radius: 3px;
+  padding: 3px;
+}
+
+.product-activity svg:hover {
+  cursor: pointer;
+  background-color: rgb(151, 149, 12, 0.2);
+}
+.product-activity svg:last-child {
+  float: right;
+  color: red;
+}
+.product-activity svg:last-child:hover {
+  background-color: rgba(148, 18, 13, 0.575);
+}
 .applicant-info span {
   color: var(--main-color);
   font-size: 12px;
@@ -654,8 +686,8 @@ button {
   align-items: center;
   justify-content: flex-start;
   color: var(--main-color);
-  gap:10px;
-  padding:10px
+  gap: 10px;
+  padding: 10px;
 }
 
 .link-store-form small {
@@ -917,6 +949,10 @@ button {
 
 /* STORES PAGE STYLES */
 
+.current-stores {
+  margin-bottom: 20px;
+}
+
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
   border-radius: 10px;
@@ -941,3 +977,56 @@ button {
 }
 
 /* END STORES PAGE STYLES */
+
+h1 {
+  font-size: 30px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 15px;
+}
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+.tbl-header {
+  background-color: #151c32;
+}
+.tbl-content {
+  height: 300px;
+  overflow-x: auto;
+  margin-top: 0px;
+  border: 1px solid #151c32;
+}
+th {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #fff;
+  text-transform: uppercase;
+}
+td {
+  padding: 15px;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 300;
+  font-size: 12px;
+  color: #fff;
+  border-bottom: solid 1px #151c32;
+}
+
+/* demo styles */
+
+/* for custom scrollbar for webkit browser*/
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}

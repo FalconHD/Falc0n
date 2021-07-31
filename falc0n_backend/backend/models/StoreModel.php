@@ -31,7 +31,7 @@ class StoreModel
         return true;
     }
 
-    public function addStore($store_name,$owner,$url)
+    public function addStore($store_name,$owner, $url)
     {
         try {
             $this->db->query("INSERT INTO
@@ -53,12 +53,13 @@ class StoreModel
         return true;
     }
 
-    public function getStoreByInfo($owner, $url)
+    public function getStoreByInfo($store_name,$owner, $url)
     {
         try {
-            $this->db->query("SELECT * FROM store WHERE url=:url AND owner=:owner");
+            $this->db->query("SELECT * FROM store WHERE url=:url AND owner=:owner AND store_name=:store_name");
             $this->db->bind(':owner', $owner);
             $this->db->bind(':url', $url);
+            $this->db->bind(':store_name', $store_name);
             return $this->db->single();
 
         } catch (\PDOExeption$err) {
@@ -71,6 +72,7 @@ class StoreModel
 
     public function getStoreById($id)
     {
+
         try {
             $this->db->query("SELECT * FROM store WHERE id=:id");
             $this->db->bind(':id', $id);

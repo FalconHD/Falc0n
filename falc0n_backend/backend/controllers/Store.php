@@ -29,8 +29,8 @@ class Store extends Controller
     {
         $store = json_decode($this->data);
         extract($this->models);
-        $StoreModel->addStore($store->store_name,$store->owner, $store->url);
-        $store = $StoreModel->getStoreByInfo($store->owner, $store->url);
+        $StoreModel->addStore($store->store_name, $store->owner, $store->url);
+        $store = $StoreModel->getStoreByInfo($store->store_name, $store->owner, $store->url);
         print_r(json_encode($store));
     }
     public function get($id)
@@ -45,7 +45,7 @@ class Store extends Controller
         extract($this->models);
         $store = $StoreModel->getStoreById($id);
         $params = array(
-            'app_name' => 'Falc0n',
+            'app_name' => 'Falc0n.exe App',
             'scope' => 'read_write', // 'read', 'write', 'read_write'
             'user_id' => $store->id,
             'return_url' => "http://localhost:3005/stores",
@@ -69,6 +69,41 @@ class Store extends Controller
         );
         $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
         $result = $woocommerce->get('products');
+        print_r(json_encode($result));
+    }
+
+    public function getOrders($store_id, $id)
+    {
+        extract($this->models);
+        $store = $StoreModel->getStoreById($store_id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+        $result = $woocommerce->get('orders', $parameters = ['product' => $id]);
+        print_r(json_encode($result));
+    }
+
+    public function getOrdersByAverage($store_id)
+    {
+        $average = json_decode($this->data);
+        // print_r($average);
+        extract($this->models);
+        $store = $StoreModel->getStoreById($store_id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+
+        $query = [
+            'date_min' => $average->start,
+            'date_max' => $average->end,
+        ];
+        $result = $woocommerce->get('reports/sales', $query);
         print_r(json_encode($result));
     }
 

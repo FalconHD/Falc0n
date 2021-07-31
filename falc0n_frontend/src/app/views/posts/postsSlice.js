@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     selectedStore: {
         store: {},
-        orders: []
+        products: []
     },
     sidebar: {
         show: false

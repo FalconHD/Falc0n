@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { RightSidebar } from '../../components/RightSidebar'
+import React, { Suspense, useEffect, useState } from 'react'
+// import { RightSidebar } from '../../components/RightSidebar'
 import { StoreButton } from '../../components/StoreButton'
 import TopHeader from '../../components/TopHeader'
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,6 +8,11 @@ import {
 } from './storesSlice';
 import Chart from 'chart.js/auto';
 
+const RightSidebar = React.lazy(() => import('../../components/RightSidebar'));
+
+const ProductsTable = React.lazy(() => import('../../components/ProductsTable'));
+
+
 
 export function Stores() {
 
@@ -15,11 +20,43 @@ export function Stores() {
     const stores = useSelector(state => state.stores)
     const dispatch = useDispatch();
 
+    const [products, setProducts] = useState([])
+    const [reportsSales, setReportsSales] = useState([])
     const [orders, setOrders] = useState([])
 
     useEffect(() => {
-        setOrders(stores.selectedStore.orders)
-    }, [stores.selectedStore])
+        setProducts(stores.selectedStore.products)
+    }, [stores.selectedStore.products])
+
+    const getReports = async () => {
+        var d = new Date();
+        var m = d.getMonth();
+        var year = d.getFullYear();
+        let id = stores.selectedStore.store.id
+        let result = await fetch(`http://localhost/falc0n/store/getOrdersByAverage/${id}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('Token')}`
+            },
+            body: JSON.stringify({
+                "start": "2021-07-01",
+                "end": "2021-07-31"
+            })
+        })
+        let data = await result.json()
+        data = data[0].totals
+        let mounth = Object.keys(data)
+        let order = []
+        let Days = []
+        mounth.map(day => {
+            Days.push(day.split('-')[2])
+            order.push(data[day].orders)
+        })
+        setReportsSales(Days)
+        setOrders(order)
+    }
+
 
 
     useEffect(() => {
@@ -33,15 +70,15 @@ export function Stores() {
 
 
         var data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            labels: reportsSales,
             datasets: [{
-                label: 'Applications',
+                label: 'Orders',
                 backgroundColor: gradient,
                 pointBackgroundColor: '#00c7d6',
                 borderWidth: 1,
                 fill: true,
                 borderColor: '#0e1a2f',
-                data: [60, 45, 80, 30, 35, 55, 25, 80, 40, 50, 80, 50]
+                data: orders
             }]
         };
 
@@ -95,7 +132,25 @@ export function Stores() {
             data: data,
             options: options
         });
-    }, [])
+
+        return () => {
+            chartInstance.destroy();
+        }
+    }, [orders])
+
+    useEffect(() => {
+        let yes = false
+        for (let key in stores.selectedStore.orders) {
+            if (stores.selectedStore.orders.hasOwnProperty(key)) {
+                yes = true
+                break;
+            }
+        }
+        console.log('orders :', yes);
+        if (!yes) {
+            getReports()
+        }
+    }, [stores.selectedStore.store])
 
 
     return (
@@ -106,7 +161,7 @@ export function Stores() {
                     <div className="chart-container">
                         <div className="chart-container-wrapper big">
                             <div className="chart-container-header">
-                                <h2>Top Active Products</h2>
+                                <h2>Orders in July</h2>
                                 <span>Last 30 days</span>
                             </div>
                             <div className="bar-chart">
@@ -120,19 +175,14 @@ export function Stores() {
                 </div>
 
                 <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
-                    {orders.length > 0
-                        ?
-                        orders.map(order => (
-                            <div key={order.id}>
-                                <img src={order.images[0].src} style={{ width: "200px", height: "200px" }} /><br />
-                                <small>{order.name}</small>
-                            </div>
-                        ))
-                        : <h5>waiting for products</h5>
-                    }
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <ProductsTable />
+                    </Suspense>
                 </div>
             </div>
-            <RightSidebar />
+            <Suspense  fallback={<div>Loading...</div>}>
+                <RightSidebar />
+            </Suspense>
         </div>
     )
 }
