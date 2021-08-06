@@ -81,7 +81,7 @@ export default function RightSidebar() {
             }
         }
         console.log(yes);
-        if (!yes) {
+        if (!yes && result[0]?.id) {
             getOrders(result[0])
         }
     }
@@ -136,11 +136,11 @@ export default function RightSidebar() {
                 </button>
                 <div class="profile-box">
                     <div class="profile-photo-wrapper">
-                        <img src="https://images.unsplash.com/photo-1551292831-023188e78222?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTE0fHxwb3J0cmFpdHxlbnwwfDB8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
+                        <img src="https://media-exp3.licdn.com/dms/image/C4E03AQHyxAeVB5tRqQ/profile-displayphoto-shrink_200_200/0/1616788381572?e=1631750400&v=beta&t=ZQUb7jr9HKfWe_EiiJvZjW_aaYfPD_c-ARDFP-0RB7Y"
                             alt="profile" />
                     </div>
-                    <p class="profile-text">Julia Pellegrini</p>
-                    <p class="profile-subtext">Recruiting Manager</p>
+                    <p class="profile-text">YOUSSEF EL BAKKOURI</p>
+                    <p class="profile-subtext">ADMIN</p>
                 </div>
                 <div class="app-right-content">
                     <div class="app-right-section">

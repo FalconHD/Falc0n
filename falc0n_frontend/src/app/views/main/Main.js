@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Chart from 'chart.js/auto';
-import { Persentager } from '../../components/Persentager';
+import Persentager from '../../components/Persentager';
 import { Progress } from '../../components/Progress';
 import TopHeader from '../../components/TopHeader';
 

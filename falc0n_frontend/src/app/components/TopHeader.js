@@ -53,7 +53,7 @@ export default function TopHeader() {
                 <h1>{title}</h1>
                 <div className="action-buttons">
                     {
-                        sidebar.activeLinkName.payload == "STORES" ? (
+                        sidebar.activeLinkName.payload != "DASHBOARD" ? (
                             <button className="open-right-area" onClick={() => rightSidebar()}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"

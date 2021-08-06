@@ -431,6 +431,46 @@ button {
   stroke: #b18e83;
 }
 
+.circular-chart.pending .circle {
+  stroke: #55008c;
+}
+
+.circular-chart.pending .circle-bg {
+  stroke: #bb9ece;
+}
+
+.circular-chart.processing .circle {
+  stroke: #dcedc8;
+}
+
+.circular-chart.processing .circle-bg {
+  stroke: #353030;
+}
+
+.circular-chart.completed .circle {
+  stroke: #7ed321;
+}
+
+.circular-chart.completed .circle-bg {
+  stroke: #67725a;
+}
+
+.circular-chart.cancelled .circle {
+  stroke: #cf0541;
+}
+
+.circular-chart.cancelled .circle-bg {
+  stroke: #633442;
+}
+
+.circular-chart.refunded .circle {
+  stroke: #eb648b;
+}
+
+.circular-chart.refunded .circle-bg {
+  stroke: #41242c;
+}
+
 .percentage {
   fill: #fff;
   font-size: 0.5em;
@@ -464,6 +504,10 @@ button {
   color: var(--app-logo);
   font-size: 12px;
   line-height: 16px;
+}
+
+.chart-type-dispayed {
+  color: var(--nav-link);
 }
 
 .salse-bar {
@@ -562,7 +606,8 @@ button {
   object-fit: cover;
   margin-right: 10px;
   flex-shrink: 0;
-  box-shadow: rgba(228, 223, 223, 0.856) 0px 1px 3px, rgba(197, 191, 191, 0.829) 0px 1px 2px;
+  box-shadow: rgba(228, 223, 223, 0.856) 0px 1px 3px,
+    rgba(197, 191, 191, 0.829) 0px 1px 2px;
 }
 .product-activity {
   color: rgb(151, 149, 12);

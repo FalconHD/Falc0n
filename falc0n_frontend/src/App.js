@@ -9,9 +9,13 @@ import {
 } from "react-router-dom";
 import './App.css';
 import { Posts } from './app/views/posts/Posts';
+import { Orders } from './app/views/orders/Orders';
+import Profil from './app/views/profil/Profil';
+
+
+
 
 function App() {
-
 
   return (
     <Router>
@@ -24,11 +28,17 @@ function App() {
           <Route path="/stores">
             <Stores />
           </Route>
+          <Route path="/orders">
+            <Orders />
+          </Route>
           <Route path="/posts">
-            <Posts/>
+            <Posts />
+          </Route>
+          <Route path="/profil">
+            <Profil />
           </Route>
         </Switch>
-        
+
       </div>
     </Router>
   );

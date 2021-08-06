@@ -4,18 +4,18 @@ import { StoreButton } from '../../components/StoreButton'
 import TopHeader from '../../components/TopHeader'
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    select,
-    addOrders
-} from './storesSlice';
+    select
+} from './ordersSlice';
 import Chart from 'chart.js/auto';
+import StoreReports from '../../components/StoreReports';
+import { addStatus } from '../stores/storesSlice';
 
 const RightSidebar = React.lazy(() => import('../../components/RightSidebar'));
-
 const ProductsTable = React.lazy(() => import('../../components/ProductsTable'));
 
 
 
-export function Stores() {
+export function Orders() {
 
 
     const stores = useSelector(state => state.stores)
@@ -23,14 +23,14 @@ export function Stores() {
 
     const [products, setProducts] = useState([])
     const [reportsSales, setReportsSales] = useState([])
-    const [sales, setSales] = useState([])
-    const [items, setItems] = useState([])
+    const [orders, setOrders] = useState([])
+    const [total, setTotal] = useState([])
 
     useEffect(() => {
         setProducts(stores.selectedStore.products)
     }, [stores.selectedStore.products])
 
-    const getReports = async () => {
+    const getYearlyReports = async () => {
         var d = new Date();
         var m = d.getMonth();
         var year = d.getFullYear();
@@ -43,65 +43,69 @@ export function Stores() {
             },
             body: JSON.stringify({
                 "start": "2021-07-15",
-                "end": "2021-08-15",
+                "end": "2021-08-15"
             })
         })
         let data = await result.json()
+        console.log('yearly',data[0]);
         data = data[0].totals
-        console.log(data);
         let mounth = Object.keys(data)
-        let sale = []
+        let order = []
         let Days = []
-        let item = []
         mounth.map(day => {
             Days.push(day.split('-')[2])
-            sale.push(data[day].sales)
-            item.push(data[day].items)
+            order.push(data[day].orders)
         })
+        
         setReportsSales(Days)
-        setItems(item)
-        setSales(sale)
-        console.log(Days,item,sale);
-        // dispatch(addOrders())
+        setOrders(order)
     }
 
 
+    const getMonthlyReports = async () => {
+        var d = new Date();
+        var m = d.getMonth();
+        var year = d.getFullYear();
+        let id = stores.selectedStore.store.id
+        let result = await fetch(`http://localhost/falc0n/store/getOrdersByAverageMin/${id}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('Token')}`
+            },
+            body: JSON.stringify({
+                "start": "2021-01-01",
+            })
+
+        })
+
+
+        let data = await result.json()
+        console.log("mounthly",data[0]);
+        dispatch(addStatus(data[0]))
+    }
 
     useEffect(() => {
 
         var chart = document.getElementById('chart').getContext('2d'),
-            gradient1 = chart.createLinearGradient(0, 0, 0, 450), gradient2 = chart.createLinearGradient(0, 0, 0, 450);
+            gradient = chart.createLinearGradient(0, 0, 0, 450);
 
-        gradient1.addColorStop(0, 'rgba(221, 129, 8, 0.6)');
-        gradient1.addColorStop(0.5, 'rgba(0, 199, 214, 0.1)');
-        gradient1.addColorStop(1, 'rgba(0, 199, 214, 0)');
-
-        gradient2.addColorStop(0, 'rgb(57,147,194,0.6)');
-        gradient2.addColorStop(0.5, 'rgb(57,147,194, 0.1)');
-        gradient2.addColorStop(1, 'rgba(0, 199, 214, 0)');
+        gradient.addColorStop(0, 'rgba(221, 129, 8, 0.6)');
+        gradient.addColorStop(0.5, 'rgba(0, 199, 214, 0.1)');
+        gradient.addColorStop(1, 'rgba(0, 199, 214, 0)');
 
 
         var data = {
             labels: reportsSales,
             datasets: [{
-                label: 'Sales',
-                backgroundColor: gradient1,
+                label: 'Orders',
+                backgroundColor: gradient,
                 pointBackgroundColor: '#00c7d6',
                 borderWidth: 1,
                 fill: true,
                 borderColor: '#0e1a2f',
-                data: sales
-            },
-            {
-                label: 'Items',
-                backgroundColor: gradient2,
-                pointBackgroundColor: '#00c7d6',
-                borderWidth: 1,
-                fill: true,
-                borderColor: '#0e1a2f',
-                data: items
-            }
-            ]
+                data: orders
+            }]
         };
 
         var options = {
@@ -158,7 +162,7 @@ export function Stores() {
         return () => {
             chartInstance.destroy();
         }
-    }, [sales,items])
+    }, [orders])
 
     useEffect(() => {
         let yes = false
@@ -170,7 +174,8 @@ export function Stores() {
         }
         console.log('orders :', yes);
         if (!yes) {
-            getReports()
+            getMonthlyReports()
+            getYearlyReports()
         }
     }, [stores.selectedStore.store])
 
@@ -179,11 +184,12 @@ export function Stores() {
         <div class="stores-pages">
             <div className="app-main">
                 <TopHeader />
+                <StoreReports />
                 <div className="store-chart">
                     <div className="chart-container">
                         <div className="chart-container-wrapper big">
                             <div className="chart-container-header">
-                                <h2>Revenue in July</h2>
+                                <h2>Orders in July</h2>
                                 <span>Last 30 days</span>
                             </div>
                             <div className="bar-chart">

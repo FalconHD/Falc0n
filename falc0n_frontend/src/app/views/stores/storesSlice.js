@@ -4,7 +4,8 @@ const initialState = {
   selectedStore: {
     store: {},
     products: [],
-    orders: []
+    orders: [],
+    status: {}
   },
   sidebar: {
     show: false
@@ -40,12 +41,18 @@ export const storesSlice = createSlice({
         }
       }
     },
-    reset : (state)=>{
+    addStatus: (state, { payload }) => {
+      state.selectedStore = {
+        ...state.selectedStore,
+        status: payload
+      }
+    },
+    reset: (state) => {
       state.selectedStore.orders = []
     }
   }
 });
 
 
-export const { select, rightSetActive, addOrders,reset } = storesSlice.actions;
+export const { select, rightSetActive, addOrders, reset, addStatus } = storesSlice.actions;
 export default storesSlice.reducer;
