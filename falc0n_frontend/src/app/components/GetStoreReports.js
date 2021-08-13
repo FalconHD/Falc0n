@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFetch } from '../Hooks/useFetch'
 import { updateTotal, updateTotalItems } from '../views/main/mainSlice';
+import { getStoreReports } from '../views/main/mainSlice'
 const { get, post, postWithUpload } = useFetch
 
 const GetStoreReports = ({ store }) => {
@@ -38,6 +39,8 @@ const GetStoreReports = ({ store }) => {
         dispatch(updateTotal(parseFloat(res[0].total_sales)))
         dispatch(updateTotalItems(parseFloat(res[0].total_orders)))
         setstate(res)
+
+        dispatch(getStoreReports(parseInt(store.id)))
     }
 
     useEffect(() => {

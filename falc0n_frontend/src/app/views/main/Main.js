@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, register, resetItems, resetTotal, updateTotal } from './mainSlice';
+import { login, register, resetHold, resetItems, resetTotal, updateTotal } from './mainSlice';
 
 import Persentager from '../../components/Persentager';
 import { Progress } from '../../components/Progress';
@@ -56,6 +56,7 @@ const Main = () => {
         return () => {
             dispatch(resetTotal())
             dispatch(resetItems())
+            dispatch(resetHold())
         }
     }, [])
 
@@ -63,12 +64,12 @@ const Main = () => {
         <div className="app-main">
             <TopHeader />
             <div className="chart-row three">
-                <Persentager title={"revenue"} revenue={main.total_sales} persentage={"70"} color={"red"} />
+                <Persentager title={"revenue"} revenue={`${main.total_sales}.00 $`} persentage={"70"} color={"red"} />
                 <Persentager title={"total"} revenue={main.updateTotalItems} persentage={"40"} color={"blue"} />
-                <Persentager title={"On-hold"} revenue={10.5} persentage={"90"} color={"orange"} />
+                <Persentager title={"On-hold"} revenue={main.onHold} persentage={"90"} color={"orange"} />
             </div>
             <div className="chart-row two">
-                <Suspense fallback={<h3>Loadiding....</h3>}>
+                <Suspense fallback={<h3>Loading....</h3>}>
                     <TotalChart />
                 </Suspense>
                 <div className="chart-container-wrapper small">

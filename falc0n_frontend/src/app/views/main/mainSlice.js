@@ -46,6 +46,12 @@ export const register = createAsyncThunk(
     }
 )
 
+export const getStoreReports = createAsyncThunk(
+    'main/reports',
+    async (body, { dispatch, getState }) => {
+        return await get(`store/reports/${body}`)
+    }
+)
 
 export const mainSlice = createSlice({
     name: 'main',
@@ -54,7 +60,8 @@ export const mainSlice = createSlice({
         Token: "",
         status: '',
         total_sales: 0,
-        updateTotalItems: 0
+        updateTotalItems: 0,
+        onHold: 0
     },
     reducers: {
         updateTotal: (state, { payload }) => {
@@ -68,6 +75,9 @@ export const mainSlice = createSlice({
         },
         resetItems: (state, action) => {
             state.updateTotalItems = 0
+        },
+        resetHold: (state, action) => {
+            state.onHold = 0
         }
     },
     extraReducers: {
@@ -106,9 +116,21 @@ export const mainSlice = createSlice({
         [register.rejected]: (state, action) => {
             state.status = 'failed'
         },
+
+
+        [getStoreReports.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [getStoreReports.fulfilled]: (state, { payload }) => {
+            state.onHold = state.onHold + payload[2].total
+        },
+        [getStoreReports.rejected]: (state, action) => {
+            state.status = 'failed'
+        },
+
     },
 })
 
 
-export const { updateTotal, resetTotal, updateTotalItems, resetItems } = mainSlice.actions;
+export const { updateTotal, resetTotal, updateTotalItems, resetItems,resetHold } = mainSlice.actions;
 export default mainSlice.reducer;

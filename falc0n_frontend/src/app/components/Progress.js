@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useFetch } from '../Hooks/useFetch'
-import { getStoreReports } from '../views/stores/storesSlice'
+
 import GetStoreReports from './GetStoreReports'
 
 const { get, post, postWithUpload } = useFetch
@@ -13,7 +13,7 @@ export function Progress({ stores }) {
     const [colors, setColors] = useState([])
 
     const getColor = (id) => {
-        console.log(Math.floor(Math.random() * 16777215).toString(16),id);
+        console.log(Math.floor(Math.random() * 16777215).toString(16), id);
         let color = Math.floor(Math.random() * 16777215).toString(16)
         // setColors([...colors,{id:id,color:color}])
         return {
@@ -26,7 +26,7 @@ export function Progress({ stores }) {
         setStatiscs(stores)
     }, [stores])
 
-    
+
     return (
         <div className="chart-container">
             <div className="chart-container-header">
@@ -49,7 +49,7 @@ export function Progress({ stores }) {
                 )
                 )
             }
-            
+
         </div>
     )
 }
