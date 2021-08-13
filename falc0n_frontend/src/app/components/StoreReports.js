@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Persentager from './Persentager';
+import { getStoreReports } from '../views/stores/storesSlice'
+
 
 export default function StoreReports() {
 
@@ -11,18 +13,7 @@ export default function StoreReports() {
     const dispatch = useDispatch()
 
 
-    const getStoreReports = async () => {
-        let id = stores.selectedStore.store.id
-        let result = await fetch(`http://localhost/falc0n/store/reports/${id}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': "application/json",
-                "Authorization": `Bearer ${localStorage.getItem('Token')}`
-            }
-        })
-        let data = await result.json()
-        setReports(data)
-    }
+
 
     useEffect(() => {
         let yes = false
@@ -33,7 +24,7 @@ export default function StoreReports() {
             }
         }
         if (!yes) {
-            getStoreReports()
+            dispatch(getStoreReports())
         }
     }, [stores.selectedStore.store])
 
@@ -41,6 +32,9 @@ export default function StoreReports() {
         setGlobal(stores.selectedStore.status)
     }, [stores.selectedStore.status])
 
+    useEffect(() => {
+        setReports(stores.selectedStore.reports)
+    }, [stores.selectedStore.reports])
 
     return (
         <>

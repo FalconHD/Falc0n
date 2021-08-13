@@ -48,7 +48,6 @@ export default function TopHeader() {
 
 
     return (
-        <>
             <div className="main-header-line">
                 <h1>{title}</h1>
                 <div className="action-buttons">
@@ -76,6 +75,5 @@ export default function TopHeader() {
 
                 </div>
             </div>
-        </>
     )
 }

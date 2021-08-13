@@ -612,6 +612,19 @@ button {
 .product-activity {
   color: rgb(151, 149, 12);
 }
+.order-activity {
+  color: rgb(151, 149, 12);
+}
+.order-activity svg {
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border-radius: 3px;
+  padding: 2px;
+}
+.order-activity svg:hover {
+  cursor: pointer;
+  background-color: rgb(151, 149, 12, 0.2);
+}
 
 .product-activity svg {
   transition: all 0.2s ease;
@@ -733,6 +746,7 @@ button {
   color: var(--main-color);
   gap: 10px;
   padding: 10px;
+  width: 100%;
 }
 
 .link-store-form small {
@@ -1044,6 +1058,12 @@ table {
   margin-top: 0px;
   border: 1px solid #151c32;
 }
+.tbl-content.customers {
+  height: 100%;
+  overflow-x: auto;
+  margin-top: 0px;
+  border: 1px solid #151c32;
+}
 th {
   padding: 20px 15px;
   text-align: left;
@@ -1061,6 +1081,13 @@ td {
   color: #fff;
   border-bottom: solid 1px #151c32;
 }
+td a {
+  color: #3481d2;
+}
+
+td a:hover {
+  color: rgb(121, 10, 10);
+}
 
 /* demo styles */
 
@@ -1074,4 +1101,63 @@ td {
 }
 ::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.imagePreview {
+  width: 100%;
+  height: 250px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px -3px 6px 2px rgba(0, 0, 0, 0.2);
+}
+.imagePreview svg{
+  width: 40%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  color: var(--list-item-hover);
+
+}
+.imagePreview img {
+  width: 100%;
+  max-height: 250px;
+}
+.buttonUpload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px;
+  box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
+  margin-top: -5px;
+  background-color: var(--list-item-hover);
+  padding: 10px;
+}
+.imgUp {
+  margin-bottom: 15px;
+  width: 100%;
+}
+.del {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  background-color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+.imgAdd {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #4bd7ef;
+  color: #fff;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  line-height: 30px;
+  margin-top: 0px;
+  cursor: pointer;
+  font-size: 15px;
 }

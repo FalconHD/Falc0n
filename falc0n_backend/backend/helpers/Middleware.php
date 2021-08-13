@@ -243,7 +243,7 @@ class Middleware
             return $this->getInfo(false, "UPLOAD_ERR_OK");
         }
 
-        if ($file->size > 1000000) {
+        if ($file->size > 5306537) {
             return $this->getInfo(false, "Exceeded filesize limit.");
         }
 
@@ -254,7 +254,7 @@ class Middleware
         }
 
         $nm = $this->hashName() . $this->extension($file->name);
-        $dir = __DIR__ . '/storage/' . $nm;
+        $dir = dirname(BASE) . '/public/assets/' . $nm;
 
         if (move_uploaded_file($file->tmp_name, $dir)) {
             return $this->getInfo(true, $nm);
@@ -322,7 +322,7 @@ class Middleware
 
 //TODO:AUTH Party
 
-    public function getToken($cin, $role)
+    public function getToken($id)
     {
         $iat = time();
         $exp = $iat + 60 * 0.1;
@@ -331,28 +331,14 @@ class Middleware
             "aud" => "localhost",
             "iat" => $iat,
             'exp' => $exp,
-            'cin' => $cin,
-            'role' => $role,
+            'id' => $id,
         );
-        switch ($role) {
-            case 'student':
-                $jwt = JWT::encode($payload, $_ENV['STUDENT_KEY'], 'HS512');
-                break;
-            case 'Admin':
-                $jwt = JWT::encode($payload, $_ENV['ADMIN_KEY'], 'HS512');
-                break;
-            case 'staff':
-                $jwt = JWT::encode($payload, $_ENV['STAF_KEY'], 'HS512');
-                break;
-            default:
-                $jwt = JWT::encode($payload, $_ENV['STUDENT_KEY'], 'HS512');
-                break;
-        }
+        $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS512');
 
         return $jwt;
     }
 
-    public function getRefrechToken($id, $role)
+    public function getRefrechToken($id)
     {
         $iat = time();
         $exp = $iat + 60 * 0.5;
@@ -362,22 +348,8 @@ class Middleware
             "iat" => $iat,
             'exp' => $exp,
             'id' => $id,
-            'role' => $role,
         );
-        switch ($role) {
-            case 'student':
-                $jwt = JWT::encode($payload, $_ENV['STUDENT_KEY'], 'HS512');
-                break;
-            case 'Admin':
-                $jwt = JWT::encode($payload, $_ENV['ADMIN_KEY'], 'HS512');
-                break;
-            case 'staff':
-                $jwt = JWT::encode($payload, $_ENV['STAF_KEY'], 'HS512');
-                break;
-            default:
-                $jwt = JWT::encode($payload, $_ENV['STUDENT_KEY'], 'HS512');
-                break;
-        }
+        $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS512');
 
         return $jwt;
     }

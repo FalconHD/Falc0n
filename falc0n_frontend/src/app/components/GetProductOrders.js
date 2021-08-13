@@ -14,7 +14,7 @@ export default function GetProductOrders(props) {
 
     const getProductData = async (id) => {
         let store = stores.selectedStore.store.id
-        const result = await fetch(`http://localhost/falc0n/store/getOrders/${store}/${id}`)
+        const result = await fetch(`http://127.0.0.1:80/falc0n/store/getOrders/${store}/${id}`)
         const productData = await result.json()
         setOrders(productData.length)
     }

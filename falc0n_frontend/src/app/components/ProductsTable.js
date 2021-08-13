@@ -1,9 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     addOrders,
-    reset
+    reset,
+    deleteProduct
 } from '../views/stores/storesSlice';
+import {
+    activateModal,
+    modalData
+} from '../views/Modal/modalSlice';
 import GetProductOrders from './GetProductOrders';
 
 
@@ -15,15 +20,36 @@ export default function DataTable() {
     const stores = useSelector(state => state.stores)
     const dispatch = useDispatch()
 
+    const deleteProductInit = (id) => {
+        dispatch(activateModal(true))
+        dispatch(modalData({
+            action: "delete",
+            infos: {
+                message: "Are you sure you want to delete Product : ",
+                id: id,
+                target: "product"
+            }
+        }))
+    }
 
+    const editProduct = (product) => {
+        dispatch(activateModal(true))
+        dispatch(modalData({
+            action: "edit",
+            infos: {
+                message: "Editing Product : ",
+                target: "product",
+                product: product
+            }
+        }))
+    }
 
     useEffect(() => {
         setProductsData(stores.selectedStore.products)
     }, [stores.selectedStore.products])
 
-    // useEffect(() => {
-    //     setProductsData(stores.selectedStore.orders)
-    // }, [stores.selectedStore.orders])
+
+
 
 
     return (
@@ -54,7 +80,7 @@ export default function DataTable() {
                                     ?
                                     productsData.map(product => (
                                         <tr key={product.id}>
-                                            <td>{product.id}</td>
+                                            <td><a href={product.permalink} target="_blank">{product.id}</a></td>
                                             <td>
                                                 <div className="applicant-line productImg">
                                                     <img src={product.images[0].src} alt="product" />
@@ -62,16 +88,16 @@ export default function DataTable() {
                                             </td>
                                             <td>{product.name}</td>
                                             <td>${product.price}</td>
-                                            {product.stock_status == 'instock' ?<td style={{color:"#7CFC00"}}>In Stock</td>:<td style={{color:"#DC143C"}}>Out of stock</td>}
+                                            {product.stock_status == 'instock' ? <td style={{ color: "#7CFC00" }}>In Stock</td> : <td style={{ color: "#DC143C" }}>Out of stock</td>}
                                             <td><GetProductOrders product={product} /></td>
                                             <td className="product-activity">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
+                                                <svg onClick={() => editProduct(product)} xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
                                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                     stroke-linejoin="round" class="feather feather-edit">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                                 </svg>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                                                <svg onClick={() => deleteProductInit(product.id)} xmlns="http://www.w3.org/2000/svg" width="26" height="26"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
                                                     <polyline points="3 6 5 6 21 6"></polyline>

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     select,
     rightSetActive,
+    getOrders
 } from '../views/stores/storesSlice';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -46,26 +47,18 @@ export default function RightSidebar() {
 
     const stores = useSelector(state => state.stores)
     const dispatch = useDispatch();
-
+    const classes = useStyles();
     const location = useLocation()
 
-    const getOrders = async (store) => {
-        let response = await fetch(`http://localhost/falc0n/store/getProducts/${store.id}`, {
-            method: "GET",
-            headers: {
-                'Content-type': "application/json"
-            }
-        })
-        let result = await response.json()
-        dispatch(select({ store: store, products: result }))
+    const getOrdersInit = (store) => {
+        dispatch(getOrders(store))
     }
-    const classes = useStyles();
 
 
 
 
     const getStores = async () => {
-        let response = await fetch(`http://localhost/falc0n/store/stores`, {
+        let response = await fetch(`http://127.0.0.1:80/falc0n/store/stores`, {
             method: "GET",
             headers: {
                 'Content-type': "application/json"
@@ -82,7 +75,7 @@ export default function RightSidebar() {
         }
         console.log(yes);
         if (!yes && result[0]?.id) {
-            getOrders(result[0])
+            getOrdersInit(result[0])
         }
     }
 
@@ -95,7 +88,7 @@ export default function RightSidebar() {
         }
         console.log(newStore);
 
-        let response = await fetch('http://localhost/falc0n/store/add', {
+        let response = await fetch('http://127.0.0.1:80/falc0n/store/add', {
             method: "POST",
             headers: {
                 'Content-type': "application/json"
@@ -103,7 +96,7 @@ export default function RightSidebar() {
             body: JSON.stringify(newStore)
         })
         let result = await response.json()
-        response = await fetch(`http://localhost/falc0n/store/connect/${result.id}`, {
+        response = await fetch(`http://127.0.0.1:80/falc0n/store/connect/${result.id}`, {
             method: "GET",
             headers: {
                 'Content-type': "application/json"
@@ -155,7 +148,7 @@ export default function RightSidebar() {
                             {
                                 addActivated
                                     ? mystores.map(store => (
-                                        <StoreButton getOrders={() => getOrders(store)} store={store} key={store.id} />
+                                        <StoreButton getOrders={() => getOrdersInit(store)} store={store} key={store.id} />
                                     ))
                                     :
                                     <div className="link-store-form">

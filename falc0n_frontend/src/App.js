@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sidebar } from './app/views/sidebar/Sidebar';
-import { Main } from './app/views/main/Main';
+import Main from './app/views/main/Main';
 import { Stores } from './app/views/stores/Stores';
 import {
   BrowserRouter as Router,
@@ -8,12 +8,14 @@ import {
   Route,
 } from "react-router-dom";
 import './App.css';
-import { Posts } from './app/views/posts/Posts';
+import { Customers } from './app/views/customers/Customers';
 import { Orders } from './app/views/orders/Orders';
 import Profil from './app/views/profil/Profil';
+import Error from './app/views/Error/Error'
+import CustomModal from './app/views/Modal/CustomModal';
 
 
-
+require('dotenv').config()
 
 function App() {
 
@@ -31,14 +33,15 @@ function App() {
           <Route path="/orders">
             <Orders />
           </Route>
-          <Route path="/posts">
-            <Posts />
+          <Route path="/customers">
+            <Customers />
           </Route>
           <Route path="/profil">
             <Profil />
           </Route>
         </Switch>
-
+        <Error />
+        <CustomModal/>
       </div>
     </Router>
   );

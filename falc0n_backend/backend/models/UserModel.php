@@ -2,7 +2,6 @@
 
 class UserModel
 {
-  
 
     public function __construct()
     {
@@ -17,25 +16,24 @@ class UserModel
 
     public function getUserById($id)
     {
-        $this->db->query("SELECT * FROM members WHERE id = :id");
+        $this->db->query("SELECT * FROM owner WHERE id = :id");
         $this->db->bind(':id', $id);
         return $this->db->single();
     }
 
     public function getUserByEmail($email)
     {
-        $this->db->query("SELECT * FROM members WHERE email = :email");
+        $this->db->query("SELECT * FROM owner WHERE email = :email");
         $this->db->bind(':email', $email);
         return $this->db->single();
     }
 
     public function getEmailById($id)
     {
-        $this->db->query("SELECT email FROM members WHERE id = :id");
+        $this->db->query("SELECT email FROM owner WHERE id = :id");
         $this->db->bind(':id', $id);
         return $this->db->single();
     }
-
 
     public function getUserByRole($role)
     {
@@ -57,32 +55,28 @@ class UserModel
 
         try {
             $this->db->query("INSERT INTO
-                members
+                owner
             SET
+                username = :username,
                 first_name = :first_name,
                 cin = :cin,
                 last_name = :last_name,
                 phone = :phone,
                 email = :email,
-                password = :password,
-                birth_date = :birth_date
+                password = :password
             ");
             $this->db->bind(':first_name', $data->first_name);
             $this->db->bind(':last_name', $data->last_name);
+            $this->db->bind(':username', $data->username);
             $this->db->bind(':phone', $data->phone);
             $this->db->bind(':cin', $data->cin);
             $this->db->bind(':email', $data->email);
             $this->db->bind(':password', $data->password);
-            $this->db->bind(':birth_date', $data->birth_date);
             $this->db->single();
-        } catch (\PDOExeption $err) {
-            return $err->getMessage();
-            die();
+        } catch (PDOExeption $err) {
+            return false;
         }
-        return $this->getUserById($data->cin);
+        return $this->getUserByEmail($data->email);
     }
 
-
-    
-   
 }

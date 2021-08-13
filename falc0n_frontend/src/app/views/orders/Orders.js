@@ -1,26 +1,19 @@
 import React, { Suspense, useEffect, useState } from 'react'
 // import { RightSidebar } from '../../components/RightSidebar'
-import { StoreButton } from '../../components/StoreButton'
 import TopHeader from '../../components/TopHeader'
 import { useSelector, useDispatch } from 'react-redux';
-import {
-    select
-} from './ordersSlice';
+
 import Chart from 'chart.js/auto';
 import StoreReports from '../../components/StoreReports';
 import { addStatus } from '../stores/storesSlice';
-
 const RightSidebar = React.lazy(() => import('../../components/RightSidebar'));
-const ProductsTable = React.lazy(() => import('../../components/ProductsTable'));
+const OrderTable = React.lazy(() => import('../../components/OrderTable'));
 
 
 
 export function Orders() {
-
-
     const stores = useSelector(state => state.stores)
     const dispatch = useDispatch();
-
     const [products, setProducts] = useState([])
     const [reportsSales, setReportsSales] = useState([])
     const [orders, setOrders] = useState([])
@@ -35,7 +28,7 @@ export function Orders() {
         var m = d.getMonth();
         var year = d.getFullYear();
         let id = stores.selectedStore.store.id
-        let result = await fetch(`http://localhost/falc0n/store/getOrdersByAverage/${id}`, {
+        let result = await fetch(`http://127.0.0.1:80/falc0n/store/getOrdersByAverage/${id}`, {
             method: "POST",
             headers: {
                 'Content-Type': "application/json",
@@ -47,7 +40,7 @@ export function Orders() {
             })
         })
         let data = await result.json()
-        console.log('yearly',data[0]);
+        console.log('yearly', data[0]);
         data = data[0].totals
         let mounth = Object.keys(data)
         let order = []
@@ -56,7 +49,6 @@ export function Orders() {
             Days.push(day.split('-')[2])
             order.push(data[day].orders)
         })
-        
         setReportsSales(Days)
         setOrders(order)
     }
@@ -67,7 +59,7 @@ export function Orders() {
         var m = d.getMonth();
         var year = d.getFullYear();
         let id = stores.selectedStore.store.id
-        let result = await fetch(`http://localhost/falc0n/store/getOrdersByAverageMin/${id}`, {
+        let result = await fetch(`http://127.0.0.1:80/falc0n/store/getOrdersByAverageMin/${id}`, {
             method: "POST",
             headers: {
                 'Content-Type': "application/json",
@@ -76,12 +68,9 @@ export function Orders() {
             body: JSON.stringify({
                 "start": "2021-01-01",
             })
-
         })
-
-
         let data = await result.json()
-        console.log("mounthly",data[0]);
+        console.log("mounthly", data[0]);
         dispatch(addStatus(data[0]))
     }
 
@@ -202,9 +191,9 @@ export function Orders() {
                     </div>
                 </div>
 
-                <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
+                <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px" ,minWidth: "500px" }}>
                     <Suspense fallback={<div>Loading...</div>}>
-                        <ProductsTable />
+                        <OrderTable getMonthlyReports={getMonthlyReports} getYearlyReports={getYearlyReports} />
                     </Suspense>
                 </div>
             </div>

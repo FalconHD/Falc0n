@@ -6,7 +6,7 @@ class Store extends Controller
     public function __construct()
     {
         $this->models = $this->model(['StoreModel', 'UserModel']);
-        $this->validator = $this->middleware();
+        $this->middleware = $this->middleware();
     }
 
     public function callback()
@@ -68,7 +68,7 @@ class Store extends Controller
             'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
         );
         $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
-        $result = $woocommerce->get('products');
+        $result = $woocommerce->get('products', ["per_page" => 100]);
         print_r(json_encode($result));
     }
 
@@ -86,10 +86,42 @@ class Store extends Controller
         print_r(json_encode($result));
     }
 
+    public function orderStatus($store_id)
+    {
+        extract($this->models);
+        $this->data = json_decode($this->data);
+        $store = $StoreModel->getStoreById($store_id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+        $data = [
+            'status' => $this->data->status,
+        ];
+        $result = $woocommerce->put('orders/' . $this->data->order_id, $data);
+        print_r(json_encode($result));
+
+    }
+
+    public function getAllOrders($store_id)
+    {
+        extract($this->models);
+        $store = $StoreModel->getStoreById($store_id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+        $result = $woocommerce->get('orders', $parameters = ['per_page' => 100]);
+        print_r(json_encode($result));
+    }
+
     public function getOrdersByAverage($store_id)
     {
         $average = json_decode($this->data);
-        // print_r($average);
         extract($this->models);
         $store = $StoreModel->getStoreById($store_id);
         $options = array(
@@ -107,10 +139,119 @@ class Store extends Controller
         print_r(json_encode($result));
     }
 
+    public function getOrdersByAverageMin($store_id)
+    {
+        $average = json_decode($this->data);
+        // print_r($average);
+        extract($this->models);
+        $store = $StoreModel->getStoreById($store_id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+
+        $query = [
+            'date_min' => $average->start,
+        ];
+        $result = $woocommerce->get('reports/sales', $query);
+        print_r(json_encode($result));
+    }
+
+    public function reports($id)
+    {
+        extract($this->models);
+        $store = $StoreModel->getStoreById($id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+        $result = $woocommerce->get('reports/orders/totals');
+        print_r(json_encode($result));
+    }
+
     public function stores()
     {
         extract($this->models);
         $stores = $StoreModel->getStores();
         print_r(json_encode($stores));
     }
+
+    public function customers($id)
+    {
+        extract($this->models);
+        $store = $StoreModel->getStoreById($id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+        $result = $woocommerce->get('customers', ['per_page' => 100, 'role' => "all"]);
+        print_r(json_encode($result));
+    }
+
+    public function deleteCustomer($id, $customer_id)
+    {
+        extract($this->models);
+        $store = $StoreModel->getStoreById($id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+        $result = $woocommerce->delete('customers/' . $customer_id, ['force' => true]);
+        print_r(json_encode($result));
+    }
+
+    public function deleteProduct($id, $product_id)
+    {
+        extract($this->models);
+        $store = $StoreModel->getStoreById($id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        try {
+            $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+            $woocommerce->delete('products/' . $product_id);
+        } catch (Throwable $th) {
+            print_r(json_encode(["message" => "Deleted 🎈"]));
+        }
+    }
+
+    public function editProduct($id, $product_id)
+    {
+        extract($this->models);
+        $image = $_FILES['file'];
+        $imageUrl = $this->middleware->upload('file');
+
+        $store = $StoreModel->getStoreById($id);
+        $options = array(
+            'wp_api' => true,
+            'version' => 'wc/v3',
+            'query_string_auth' => true, // Force Basic Authentication as query string true and using under HTTPS
+        );
+        print_r($imageUrl);
+        $data = [
+            "images" => [
+                (Object) [
+                    "src" => 'http://localhost/falc0n/assets/' . $imageUrl->message,
+                ],
+            ],
+        ];
+        try {
+            $woocommerce = $this->woocommerce($store->url, $store->consumer_key, $store->consumer_secret, $options);
+            $woocommerce->put('products/' . $product_id, $data);
+        } catch (Throwable $th) {
+            throw $th;
+        }
+        print_r($imageUrl);
+    }
+
 }

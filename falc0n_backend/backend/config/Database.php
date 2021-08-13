@@ -54,7 +54,11 @@ class Database
 
     public function execute()
     {
-        return $this->stmt->execute();
+        try {
+            $this->stmt->execute();
+        } catch (\Throwable$th) {
+            http_response_code(500);
+        }
     }
 
     public function all()

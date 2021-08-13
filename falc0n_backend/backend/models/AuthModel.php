@@ -14,12 +14,12 @@ class AuthModel
             $this->db->query("INSERT INTO
                 Auth
             SET
-                user_id = :user_id,
+                owner_id = :owner_id,
                 refreshToken = :refreshToken
                 ");
 
             $this->db->bind(':refreshToken', $refreshToken);
-            $this->db->bind(':user_id', $user);
+            $this->db->bind(':owner_id', $user);
             $this->db->single();
 
         } catch (\PDOExeption$err) {

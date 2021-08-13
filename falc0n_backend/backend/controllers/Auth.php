@@ -5,71 +5,69 @@ class Auth extends Controller
 
     public function __construct()
     {
-        $this->AuthModel = $this->model('AuthModel');
-        $this->userModel = $this->model('UserModel');
-        $this->validator = $this->middleware();
+        $this->models = $this->model(['AuthModel', 'UserModel']);
+        $this->middleware = $this->middleware();
         // $this->notifModel = $this->model('notifModel');
     }
 
     public function login()
     {
-
-        // TODO  :  schema validation
-        $rules = [
-            'email' => 'required|email',
-            'password' => 'required|min:0',
-        ];
-        try {
-            $response = $this->validator->validate($this->data, $rules);
-            if ($response->error) {
-                die(print_r(json_encode($response)));
-            }
-        } catch (\Exception$th) {
-            die(print_r($th->getMessage()));
-            // exit(throw $th);
-        }
-
-        // TODO  :  Login The User
+        extract($this->models);
         $this->data = json_decode($this->data);
-        $user = $this->userModel->getUserByEmail($this->data->email);
+        // TODO  :  Login The User
+        $user = $UserModel->getUserByEmail($this->data->email);
         if ($user) {
             if (password_verify($this->data->password, $user->password)) {
-                $token = $this->getToken($user->id, $user->role);
-                $refrechToken = $this->getRefrechToken($user->id, $user->role, $user->password);
+                $token = $this->middleware->getToken($user->id);
+                $refrechToken = $this->middleware->getRefrechToken($user->id);
                 unset($user->password);
 
                 // !TODO : Store the Refrech Token in DB
-                $this->AuthModel->add($refrechToken, $user->id);
+                $AuthModel->add($refrechToken, $user->id);
                 print_r(json_encode(array(
                     'User' => $user,
                     'Token' => $token,
                 )));
             } else {
+                http_response_code(401);
                 $res = json_encode(array(
                     'error' => 'password incorrect',
                 ));
-                print_r($res);
-            }
+                print_r($res);}
         } else {
+            http_response_code(401);
             $res = json_encode(array(
                 'error' => 'email incorrect',
             ));
             print_r($res);
+
         }
     }
 
     public function register()
     {
+
+        //TODO : REGISTRETION :
+        extract($this->models);
+        $this->data = json_decode($this->data);
         try {
             $this->data->password = password_hash($this->data->password, PASSWORD_DEFAULT);
-            $user = $this->userModel->register($this->data);
-            $token = $this->auth($user->id, $user->role, $user->password);
+            $user = $UserModel->register($this->data);
+            if(!$user){
+                die("wahyaaaaaaaaaaa");
+            }
+            $token = $this->middleware->getToken($user->id);
+            $refrechToken = $this->middleware->getRefrechToken($user->id);
             unset($user->password);
+
+            // !TODO : Store the Refrech Token in DB
+            $AuthModel->add($refrechToken, $user->id);
             print_r(json_encode(array(
                 'User' => $user,
                 'Token' => $token,
             )));
-        } catch (\PDOExeption$err) {
+
+        } catch (PDOExeption $err) {
             http_response_code(500);
             print_r(json_encode(array('error' => $err->getMessage())));
             die();
@@ -124,11 +122,9 @@ class Auth extends Controller
     public function callback()
     {
         $post_data = $this->data;
-       
 
         $post_data = json_decode($post_data);
 
-       
         $user_id = (int) filter_var($post_data->user_id, FILTER_SANITIZE_NUMBER_INT);
         $consumer_key = filter_var($post_data->consumer_key, FILTER_SANITIZE_STRING);
         $consumer_secret = filter_var($post_data->consumer_secret, FILTER_SANITIZE_STRING);

@@ -7,6 +7,8 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 session_start();
 
+define("BASE",__DIR__);
+
 //TODO auto load all classes in same place :
 
 function load($className)

@@ -35,7 +35,7 @@ export function Stores() {
         var m = d.getMonth();
         var year = d.getFullYear();
         let id = stores.selectedStore.store.id
-        let result = await fetch(`http://localhost/falc0n/store/getOrdersByAverage/${id}`, {
+        let result = await fetch(`http://127.0.0.1:80/falc0n/store/getOrdersByAverage/${id}`, {
             method: "POST",
             headers: {
                 'Content-Type': "application/json",
@@ -176,7 +176,7 @@ export function Stores() {
 
 
     return (
-        <div class="stores-pages">
+        <div class="stores-pages" >
             <div className="app-main">
                 <TopHeader />
                 <div className="store-chart">
