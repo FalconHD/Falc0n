@@ -20,11 +20,14 @@ export default function DataTable() {
 
 
     const selectedDeletedCustomer = (id) => {
-        dispatch(modalData({ action: "delete", infos: {
-            message : "Are you sure you want to delete Customer with id :",
-            id : id,
-            target : "customer"
-        } }))
+        dispatch(modalData({
+            action: "delete",
+            infos: {
+                message: "Are you sure you want to delete Customer with id :",
+                id: id,
+                target: "customer"
+            }
+        }))
         dispatch(activateModal(true))
     }
 

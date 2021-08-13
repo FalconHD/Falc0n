@@ -52,10 +52,23 @@ export const mainSlice = createSlice({
     initialState: {
         User: {},
         Token: "",
-        status: ''
+        status: '',
+        total_sales: 0,
+        updateTotalItems: 0
     },
     reducers: {
-
+        updateTotal: (state, { payload }) => {
+            state.total_sales = parseFloat(state.total_sales) + parseFloat(payload)
+        },
+        updateTotalItems: (state, { payload }) => {
+            state.updateTotalItems = parseFloat(state.updateTotalItems) + parseFloat(payload)
+        },
+        resetTotal: (state, action) => {
+            state.total_sales = 0
+        },
+        resetItems: (state, action) => {
+            state.updateTotalItems = 0
+        }
     },
     extraReducers: {
 
@@ -97,5 +110,5 @@ export const mainSlice = createSlice({
 })
 
 
-export const { } = mainSlice.actions;
+export const { updateTotal, resetTotal, updateTotalItems, resetItems } = mainSlice.actions;
 export default mainSlice.reducer;

@@ -1,6 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useFetch } from '../Hooks/useFetch'
+import { getStoreReports } from '../views/stores/storesSlice'
+import GetStoreReports from './GetStoreReports'
 
-export function Progress() {
+const { get, post, postWithUpload } = useFetch
+
+
+
+export function Progress({ stores }) {
+    const [all, setAll] = useState([])
+    const [statics, setStatiscs] = useState([])
+    const [colors, setColors] = useState([])
+
+    const getColor = (id) => {
+        console.log(Math.floor(Math.random() * 16777215).toString(16),id);
+        let color = Math.floor(Math.random() * 16777215).toString(16)
+        // setColors([...colors,{id:id,color:color}])
+        return {
+            'background-color': `#${color}`
+        }
+    }
+
+
+    useEffect(() => {
+        setStatiscs(stores)
+    }, [stores])
+
+    
     return (
         <div className="chart-container">
             <div className="chart-container-header">
@@ -13,26 +39,17 @@ export function Progress() {
                 <span className="bar-progress shortlisted" style={{ width: "18%" }}></span>
                 <span className="bar-progress applications" style={{ width: "64%" }}></span>
             </div>
-            <div className="progress-bar-info">
-                <span className="progress-color applications"></span>
-                <span className="progress-type">WALID</span>
-                <span className="progress-amount">64%</span>
-            </div>
-            <div className="progress-bar-info">
-                <span className="progress-color shortlisted"></span>
-                <span className="progress-type">YUSUF</span>
-                <span className="progress-amount">18%</span>
-            </div>
-            <div className="progress-bar-info">
-                <span className="progress-color on-hold"></span>
-                <span className="progress-type">FALC0N</span>
-                <span className="progress-amount">10%</span>
-            </div>
-            <div className="progress-bar-info">
-                <span className="progress-color rejected"></span>
-                <span className="progress-type">UNESS</span>
-                <span className="progress-amount">8%</span>
-            </div>
+            {
+                stores.map(store => (
+                    <div className="progress-bar-info">
+                        <span className="progress-color " style={getColor(store.id)}></span>
+                        <span className="progress-type">{`${store?.store_name}`.toLocaleUpperCase()}</span>
+                        <span className="progress-amount" ><GetStoreReports store={store} /></span>
+                    </div>
+                )
+                )
+            }
+            
         </div>
     )
 }

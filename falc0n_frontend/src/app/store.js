@@ -5,6 +5,7 @@ import storesReducer from './views/stores/storesSlice';
 import errorReducer from './views/Error/errorSlice';
 import customersReducer from './views/customers/customersSlice';
 import modalReducer from './views/Modal/modalSlice';
+import mainReducer from './views/main/mainSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     stores: storesReducer,
     customers: customersReducer,
     error: errorReducer,
-    Modal: modalReducer
+    Modal: modalReducer,
+    main: mainReducer
   },
 });

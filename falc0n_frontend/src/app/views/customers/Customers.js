@@ -50,9 +50,9 @@ export function Customers() {
                 </div>
 
             </div>
-            {/* <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <RightSidebar />
-            </Suspense> */}
+            </Suspense>
         </div>
     )
 }

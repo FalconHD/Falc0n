@@ -118,18 +118,20 @@ const CustomModal = () => {
 
     const startDelete = () => {
         // dispatch(customerDelete(selectedCustomerData.infos.id))
-        dispatch(methods[selectedCustomerData.infos.target](selectedCustomerData.infos.id))
+        dispatch(methods[selectedCustomerData.target](selectedCustomerData.id))
         handleClose()
     }
 
     useEffect(() => {
-        if (modalStore.data.target == "product") {
+        if (modalStore.data.target == "product" && modalStore.action == "edit") {
             console.log('product target ');
+            setSelectedCustomerSata(modalStore.data)
             setName(modalStore.data?.product?.name)
             setPrice(modalStore.data?.product?.price)
             setStock(modalStore.data?.product?.stock_status)
         } else {
             setSelectedCustomerSata(modalStore.data)
+            console.log(selectedCustomerData);
         }
     }, [modalStore.data]);
 
@@ -145,10 +147,11 @@ const CustomModal = () => {
             stock: Stock
         }
         console.log(infos);
-        // let data = new FormData();
-        // data.append('file', imageProduct);
-        // data.append('data', infos);
-        // dispatch(editProduct({ data, id: selectedCustomerData.product.id }))
+        let data = new FormData();
+        data.append('file', imageProduct);
+        data.append('data', JSON.stringify(infos));
+        dispatch(editProduct({ data, id: selectedCustomerData.product.id }))
+        handleClose()
     }
 
 
@@ -172,7 +175,7 @@ const CustomModal = () => {
 
                             <h5 id="transition-modal-title">DELETING CUSTOMER :</h5>
                             <div id="transition-modal-description" className={classes.root}>
-                                <small>{selectedCustomerData?.infos?.message}  {selectedCustomerData.infos?.id}</small>
+                                <small>{selectedCustomerData?.message}  {selectedCustomerData?.id}</small>
                                 <div style={{ display: "flex", gap: '20px' }}>
                                     <Button onClick={() => handleClose()} style={{ backgroundColor: '#0c1635', color: 'white' }} variant="contained" disableElevation>
                                         <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -211,7 +214,7 @@ const CustomModal = () => {
                 >
                     <Fade in={open} >
                         <div className={classes.paper2}>
-                            <div style={{ width:'100%' }}>
+                            <div style={{ width: '100%' }}>
                                 <h5 id="transition-modal-title">{selectedCustomerData.message} {selectedCustomerData?.product?.id}</h5>
                                 <div id="transition-modal-description" className={classes.root}>
                                     <div className="link-store-form">
@@ -227,10 +230,10 @@ const CustomModal = () => {
                                                 value={Stock}
                                                 onChange={(e) => { setStock(e.target.value) }}
                                             >
-                                                
-                                            
-                                                <MenuItem style={{ color: '#151c32' }} value={Stock == "instock" ? Stock : 'inStock'}>inStock</MenuItem>
-                                                <MenuItem style={{ color: '#151c32' }} value={Stock == "outofstock" ? Stock : 'outofstock'}>ouOfStock</MenuItem>
+
+
+                                                <MenuItem style={{ color: '#151c32' }} value={Stock == "instock" ? Stock : 'instock'}>in Stock</MenuItem>
+                                                <MenuItem style={{ color: '#151c32' }} value={Stock == "outofstock" ? Stock : 'outofstock'}>Out Of Stock</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <Upload setImageProduct={setImageProduct} style={{ width: "100%" }} />

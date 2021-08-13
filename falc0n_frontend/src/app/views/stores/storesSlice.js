@@ -40,7 +40,7 @@ export const editProduct = createAsyncThunk(
     await postWithUpload(`store/editProduct/${idx}/${id}`, data)
       .then(response => response.text())
       .then((result) => {
-        console.log(result);
+        dispatch(getOrders(stores.selectedStore.store))
       })
 
   }
