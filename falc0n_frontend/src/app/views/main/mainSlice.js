@@ -3,7 +3,7 @@ import { useFetch } from '../../Hooks/useFetch'
 import { show } from '../Error/errorSlice'
 
 
-const { post, get } = useFetch
+const { post, get, postWithUpload } = useFetch
 
 //TODO : LOGIN
 export const login = createAsyncThunk(
@@ -50,6 +50,14 @@ export const getStoreReports = createAsyncThunk(
     'main/reports',
     async (body, { dispatch, getState }) => {
         return await get(`store/reports/${body}`)
+    }
+)
+
+export const editProfile = createAsyncThunk(
+    'main/editProfile',
+    async ( body , { dispatch, getState }) => {
+        let { main } = getState()
+        return await postWithUpload(`user/edit/${main.User.id}`, body,main.Token)
     }
 )
 
@@ -132,5 +140,5 @@ export const mainSlice = createSlice({
 })
 
 
-export const { updateTotal, resetTotal, updateTotalItems, resetItems,resetHold } = mainSlice.actions;
+export const { updateTotal, resetTotal, updateTotalItems, resetItems, resetHold } = mainSlice.actions;
 export default mainSlice.reducer;
