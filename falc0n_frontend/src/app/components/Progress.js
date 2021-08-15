@@ -13,7 +13,6 @@ export function Progress({ stores }) {
     const [colors, setColors] = useState([])
 
     const getColor = (id) => {
-        console.log(Math.floor(Math.random() * 16777215).toString(16), id);
         let color = Math.floor(Math.random() * 16777215).toString(16)
         // setColors([...colors,{id:id,color:color}])
         return {

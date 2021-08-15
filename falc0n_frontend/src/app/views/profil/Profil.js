@@ -8,7 +8,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
-import { editProfile } from '../main/mainSlice';
+import { editProfile, getUserData, verifyToken } from '../main/mainSlice';
+import { Redirect } from 'react-router-dom';
+import TopHeader from '../../components/TopHeader';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,8 +57,18 @@ const Profil = () => {
     const [youCanFetch, setYouCanFetch] = useState(false);
     const main = useSelector(state => state.main)
     const [user, setUser] = useState({})
-
+    const [isAuthenticated, setisAuthenticated] = useState(true)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (main.Authorized) {
+            setisAuthenticated(true)
+        } else {
+            dispatch(verifyToken(localStorage.getItem("Token")))
+            setisAuthenticated(false)
+        }
+    }, [main.Authorized])
+
 
     useEffect(() => {
         if (image) {
@@ -77,11 +89,11 @@ const Profil = () => {
         console.log(infos);
         let data = new FormData();
         if (profileInfo.image) {
-            data.append('file ', profileInfo.image);
+            console.log(profileInfo.image);
+            data.append('file', profileInfo.image);
         }
         data.append('data', JSON.stringify(infos));
-        console.log(JSON.stringify(infos));
-        dispatch(editProfile(data))
+        dispatch(editProfile({ data }))
 
     }
     useEffect(() => {
@@ -102,13 +114,21 @@ const Profil = () => {
 
 
     useEffect(() => {
-        let { email, first_name, phone, last_name, cin, username } = user
-        setPinfo({ email, first_name, phone, last_name, cin, username })
+        if (user) {
+            let { email, first_name, phone, last_name, cin, username } = user
+            setPinfo({ email, first_name, phone, last_name, cin, username })
+        }
     }, [user]);
 
     useEffect(() => {
-        // console.log(main.User);
+        console.log(main.User);
         setUser(main.User)
+    }, [main.User]);
+
+    useEffect(() => {
+        if (!main.User) {
+            dispatch(getUserData())
+        }
     }, []);
 
 
@@ -119,6 +139,8 @@ const Profil = () => {
 
 
         <div className="app-main">
+            <TopHeader />
+            {isAuthenticated ? null : <Redirect to='auth' />}
             <div className="chart-container prof" style={{ position: 'relative' }}>
                 <FormGroup row style={{ position: 'absolute', top: "40px", right: "20px", color: 'white' }}>
                     <FormControlLabel
@@ -150,7 +172,7 @@ const Profil = () => {
                                             {
                                                 imageUrl ?
                                                     <div id="imagePreview" style={{ backgroundImage: `url(${imageUrl})` }}></div> :
-                                                    <div id="imagePreview" style={{ backgroundImage: `url(${main.User.image})` }}></div>
+                                                    <div id="imagePreview" style={{ backgroundImage: `url(${main.User?.image})` }}></div>
                                             }
                                         </div>
                                     </div>
@@ -159,7 +181,7 @@ const Profil = () => {
                                 <div className="profile_info top">
                                     <section className="user-top">
                                         <div className="name">
-                                            {`${user.first_name}  ${user.last_name}`.toLocaleUpperCase()}
+                                            {`${user?.first_name}  ${user?.last_name}`.toLocaleUpperCase()}
                                         </div>
                                         <div className="infos">
                                             <span>
@@ -171,7 +193,7 @@ const Profil = () => {
                                                     <line x1="12" y1="18" x2="12.01" y2="18">
                                                     </line>
                                                 </svg>
-                                                {user.phone}
+                                                {user?.phone}
                                             </span>
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
@@ -179,7 +201,7 @@ const Profil = () => {
                                                     stroke-linecap="round" stroke-linejoin="round" class="feather feather-at-sign">
                                                     <circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
                                                 </svg>
-                                                {user.email}
+                                                {user?.email}
                                             </span>
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
@@ -189,7 +211,7 @@ const Profil = () => {
                                                         width="22" height="16" rx="2" ry="2"></rect>
                                                     <line x1="1" y1="10" x2="23" y2="10"></line>
                                                 </svg>
-                                                {user.cin}
+                                                {user?.cin}
                                             </span>
                                         </div>
                                     </section>

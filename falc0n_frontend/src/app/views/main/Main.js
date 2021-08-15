@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, register, resetHold, resetItems, resetTotal, updateTotal } from './mainSlice';
+import { login, register, resetHold, resetItems, resetTotal, resetYearSales, updateTotal, verifyToken } from './mainSlice';
 
 import Persentager from '../../components/Persentager';
 import { Progress } from '../../components/Progress';
@@ -8,17 +8,28 @@ import TopHeader from '../../components/TopHeader';
 import TotalChart from '../../components/TotalChart';
 import { Suspense } from 'react';
 import RecentOrders from '../../components/RecentOrders';
+import { Redirect } from 'react-router-dom';
 
 
 const Main = () => {
 
-    const dispatch = useDispatch()
-    const main = useSelector(state => state.main)
     const stores = useSelector(state => state.stores)
     const [Stores, setStores] = useState([])
+    const [isAuthenticated, setisAuthenticated] = useState(true)
+    const main = useSelector(state => state.main)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (main.Authorized) {
+            setisAuthenticated(true)
+        } else {
+            dispatch(verifyToken(localStorage.getItem("Token")))
+            setisAuthenticated(false)
+        }
+    }, [main.Authorized])
 
     const getStores = async () => {
-        let response = await fetch(`http://127.0.0.1:80/falc0n/store/stores`, {
+        let response = await fetch(`http://127.0.0.1:80/falc0n/store/stores/${main.User?.id}`, {
             method: "GET",
             headers: {
                 'Content-type': "application/json"
@@ -28,15 +39,16 @@ const Main = () => {
         setStores(result)
     }
 
-    useEffect(() => {
-        getStores()
-    }, [])
 
     useEffect(() => {
-        dispatch(login({
-            email: 'youssbak.2015@gmail.com',
-            password: "123"
-        }))
+        getStores()
+    }, [main.User?.id])
+
+    useEffect(() => {
+        // dispatch(login({
+        //     email: 'youssbak.2015@gmail.com',
+        //     password: "123"
+        // }))
 
         // dispatch(
         //     register({
@@ -53,20 +65,26 @@ const Main = () => {
     }, [])
 
     useEffect(() => {
+        console.log(100 - (main.onHold / main.updateTotalItems))
+    }, [])
+    useEffect(() => {
+
         return () => {
             dispatch(resetTotal())
             dispatch(resetItems())
             dispatch(resetHold())
+            dispatch(resetYearSales())
         }
     }, [])
 
     return (
         <div className="app-main">
+            {isAuthenticated ? null : <Redirect to='auth' />}
             <TopHeader />
             <div className="chart-row three">
-                <Persentager title={"revenue"} revenue={`${main.total_sales}.00 $`} persentage={"70"} color={"red"} />
-                <Persentager title={"total"} revenue={main.updateTotalItems} persentage={"40"} color={"blue"} />
-                <Persentager title={"On-hold"} revenue={main.onHold} persentage={"90"} color={"orange"} />
+                <Persentager title={"revenue"} revenue={`${main.total_sales}.00 $`} persentage={"100"} color={"red"} />
+                <Persentager title={"total"} revenue={main.updateTotalItems} persentage={`${Math.round(100 - (main.onHold / main.updateTotalItems) * 100)}`} color={"blue"} />
+                <Persentager title={"On-hold"} revenue={main.onHold} persentage={`${Math.round((main.onHold / main.updateTotalItems) * 100)}`} color={"orange"} />
             </div>
             <div className="chart-row two">
                 <Suspense fallback={<h3>Loading....</h3>}>

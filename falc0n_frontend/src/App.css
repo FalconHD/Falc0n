@@ -932,8 +932,6 @@ button {
   }
 }
 
-
-
 /* STORES PAGE STYLES */
 
 .current-stores {
@@ -1033,19 +1031,18 @@ td a:hover {
 
 .imagePreview {
   width: 100%;
-  height: 250px; 
+  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0px -3px 6px 2px rgba(0, 0, 0, 0.2);
 }
-.imagePreview svg{
+.imagePreview svg {
   width: 40%;
   height: 250px;
   display: flex;
   align-items: center;
   color: var(--list-item-hover);
-
 }
 .imagePreview img {
   width: 100%;
@@ -1090,11 +1087,7 @@ td a:hover {
   font-size: 15px;
 }
 
-
-
 /* profile Page */
-
-
 
 .profile {
   max-width: 960px;
@@ -1140,19 +1133,17 @@ h1 small {
   border-radius: 100%;
   background: var(--draft-icon);
   border: 1px solid var(--list-item-hover);
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.12);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
   cursor: pointer;
   font-weight: normal;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
-
 
 .avatar-upload .avatar-edit input + label:hover {
   background: #f1f1f1;
   border-color: #d6d6d6;
 }
 .avatar-upload .avatar-edit input + label:after {
-  
   color: #757575;
   position: absolute;
   top: 10px;
@@ -1167,7 +1158,7 @@ h1 small {
   position: relative;
   border-radius: 100%;
   border: 3px solid var(--close-icon);
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 .avatar-upload .avatar-preview > div {
   width: 100%;
@@ -1192,7 +1183,6 @@ h1 small {
   align-items: center;
 }
 
-
 .wrraper_profile {
   display: flex;
   justify-content: space-between;
@@ -1208,7 +1198,6 @@ h1 small {
   align-items: flex-start;
 }
 
-
 .social {
   display: flex;
   flex-direction: column;
@@ -1217,28 +1206,28 @@ h1 small {
 
   gap: 10px;
 }
-.social svg{
+.social svg {
   border: 1px solid var(--main-color);
   padding: 10px;
   border-radius: 100px;
 }
 
-.user-top{
+.user-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
-.user-top .name{
-
+.user-top .name {
   display: flex;
   align-items: flex-end;
   height: 100%;
 }
 
-.profile .username {color: var(--close-icon);}
+.profile .username {
+  color: var(--close-icon);
+}
 
-.user-top .infos{
+.user-top .infos {
   font-size: 12px;
   color: var(--main-color);
   padding: 30px 2px;
@@ -1247,9 +1236,8 @@ h1 small {
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
-
 }
-.user-top .infos span svg{
+.user-top .infos span svg {
   margin-right: 5px;
 }
 
@@ -1261,12 +1249,32 @@ h1 small {
   align-items: center;
   font-size: 11px;
 }
-.profile_info.bottom{
+.profile_info.bottom {
   padding: 0 20px;
 }
 
+.switcherAuth:hover {
+  cursor: pointer;
+}
 
+.logout {
+  width: 100%;
+  margin-top: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--draft-icon);
+  transition: all .2s ease;
+}
+.logout svg{
+  color: var(--draft-bg);
+}
 
+.logout:hover {
+  color: var(--draft-bg);
+  cursor: pointer;
+}
 
 
 @media screen and (max-width: 1180px) {
@@ -1346,15 +1354,16 @@ h1 small {
     width: 100%;
     justify-content: center;
   }
-  .profile,.profile_info {
+  .profile,
+  .profile_info {
     width: 100%;
   }
-  .user-top,.profile_info section {
+  .user-top,
+  .profile_info section {
     width: 100%;
     align-items: center;
   }
   .user-top .infos {
     flex-direction: column;
   }
-  
 }

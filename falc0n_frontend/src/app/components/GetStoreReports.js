@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFetch } from '../Hooks/useFetch'
-import { updateTotal, updateTotalItems } from '../views/main/mainSlice';
+import { updateTotal, updateTotalItems, updateYearlySales } from '../views/main/mainSlice';
 import { getStoreReports } from '../views/main/mainSlice'
 const { get, post, postWithUpload } = useFetch
 
@@ -36,6 +36,7 @@ const GetStoreReports = ({ store }) => {
         let data = await post(`store/getOrdersByAverageMin/${store.id}`, body)
         let res = await data.json()
         console.log(res[0].total_sales);
+        dispatch(updateYearlySales(res[0].totals))
         dispatch(updateTotal(parseFloat(res[0].total_sales)))
         dispatch(updateTotalItems(parseFloat(res[0].total_orders)))
         setstate(res)
@@ -47,7 +48,7 @@ const GetStoreReports = ({ store }) => {
         reports()
     }, [])
     return (
-        <small>{Math.ceil((parseFloat(state[0]?.total_sales)*100) / parseFloat(main.total_sales))} %</small>
+        <small>{Math.round((parseFloat(state[0]?.total_sales)*100) / parseFloat(main.total_sales))} %</small>
     )
 }
 

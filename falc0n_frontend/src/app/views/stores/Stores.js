@@ -8,6 +8,8 @@ import {
     addOrders
 } from './storesSlice';
 import Chart from 'chart.js/auto';
+import { Redirect } from 'react-router-dom';
+import { verifyToken } from '../main/mainSlice';
 
 const RightSidebar = React.lazy(() => import('../../components/RightSidebar'));
 
@@ -19,12 +21,25 @@ export function Stores() {
 
 
     const stores = useSelector(state => state.stores)
-    const dispatch = useDispatch();
-
     const [products, setProducts] = useState([])
     const [reportsSales, setReportsSales] = useState([])
     const [sales, setSales] = useState([])
     const [items, setItems] = useState([])
+    const [isAuthenticated, setisAuthenticated] = useState(true)
+    const main = useSelector(state => state.main)
+    const dispatch = useDispatch()
+
+  
+
+
+    useEffect(() => {
+        if (main.Authorized) {
+            setisAuthenticated(true)
+        } else {
+            dispatch(verifyToken(localStorage.getItem("Token")))
+            setisAuthenticated(false)
+        }
+    }, [main.Authorized])
 
     useEffect(() => {
         setProducts(stores.selectedStore.products)
@@ -61,7 +76,7 @@ export function Stores() {
         setReportsSales(Days)
         setItems(item)
         setSales(sale)
-        console.log(Days,item,sale);
+        console.log(Days, item, sale);
         // dispatch(addOrders())
     }
 
@@ -158,7 +173,7 @@ export function Stores() {
         return () => {
             chartInstance.destroy();
         }
-    }, [sales,items])
+    }, [sales, items])
 
     useEffect(() => {
         let yes = false
@@ -177,6 +192,7 @@ export function Stores() {
 
     return (
         <div class="stores-pages" >
+            {isAuthenticated ? null : <Redirect to='auth' />}
             <div className="app-main">
                 <TopHeader />
                 <div className="store-chart">

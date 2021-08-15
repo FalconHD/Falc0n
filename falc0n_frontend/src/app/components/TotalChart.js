@@ -1,9 +1,55 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
+import { useDispatch, useSelector } from 'react-redux';
 
 const TotalChart = () => {
 
+    const [reports, setReports] = useState([])
+    const main = useSelector(state => state.main)
+    const [mounths, setMounths] = useState([])
+    const [sales, setSales] = useState([])
+    const [year, setyear] = useState(null)
+    const dispatch = useDispatch()
+
+
+
     useEffect(() => {
+        if(main.yearSales.length>0){
+            setReports(main.yearSales)
+        }else{
+            setMounths([])
+            setSales([])
+        }
+    }, [main.yearSales])
+
+    useEffect(() => {
+        let final = [0, 0, 0, 0, 0, 0, 0, 0]
+        if (reports.length > 0) {
+            let mounth = Object.keys(reports[0])
+
+            let Days = []
+            mounth.map(day => {
+                Days.push(day.split('-')[1])
+            })
+            let dayNumber = []
+            Days.forEach((day, idx) => {
+                dayNumber.push(+day)
+                reports.forEach(store => {
+                    final[idx] = final[idx] + +store[[`2021-${day}`]].sales;
+                })
+            });
+
+            setMounths(dayNumber)
+            setSales(final)
+        }
+
+    }, [reports])
+
+
+
+    useEffect(() => {
+ 
+        setyear(new Date().getFullYear())
         var chart = document.getElementById('chart').getContext('2d'),
             gradient = chart.createLinearGradient(0, 0, 0, 450);
 
@@ -13,7 +59,7 @@ const TotalChart = () => {
 
 
         var data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            labels: mounths,
             datasets: [{
                 label: 'Applications',
                 backgroundColor: gradient,
@@ -21,7 +67,7 @@ const TotalChart = () => {
                 borderWidth: 1,
                 fill: true,
                 borderColor: '#0e1a2f',
-                data: [60, 45, 80, 30, 35, 55, 25, 80, 40, 50, 80, 50]
+                data: sales,
             }]
         };
 
@@ -79,13 +125,13 @@ const TotalChart = () => {
         return () => {
             chartInstance.destroy();
         }
-    }, [])
+    }, [mounths,sales])
     return (
         <div className="chart-container-wrapper big">
             <div className="chart-container">
                 <div className="chart-container-header">
-                    <h2>Top Active Products</h2>
-                    <span>Last 30 days</span>
+                    <h2>Stores Revenue</h2>
+                    <span>{year}</span>
                 </div>
                 <div className="line-chart">
                     <canvas id="chart"></canvas>

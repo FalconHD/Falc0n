@@ -49,27 +49,49 @@ export const register = createAsyncThunk(
 export const getStoreReports = createAsyncThunk(
     'main/reports',
     async (body, { dispatch, getState }) => {
-        return await get(`store/reports/${body}`)
+        let { main } = getState()
+        return await get(`store/reports/${body}`, main.Token)
     }
 )
 
 export const editProfile = createAsyncThunk(
     'main/editProfile',
-    async ( body , { dispatch, getState }) => {
+    async ({ data }, { dispatch, getState }) => {
+        let token = localStorage.getItem("Token")
         let { main } = getState()
-        return await postWithUpload(`user/edit/${main.User.id}`, body,main.Token)
+        return await postWithUpload(`user/edit/${main.User.id}`, data, main.Token).then(response => response.json())
     }
 )
+
+export const getUserData = createAsyncThunk(
+    'main/editProfile',
+    async (body, { dispatch, getState }) => {
+        let { main } = getState()
+        return await get(`user/user`, main.Token)
+    }
+)
+
+export const verifyToken = createAsyncThunk(
+    'main/token',
+    async (body, { dispatch, getState }) => {
+        let token = localStorage.getItem("Token")
+        return await get(`auth/token/${localStorage.getItem('id')}`, token)
+    }
+)
+
+
 
 export const mainSlice = createSlice({
     name: 'main',
     initialState: {
-        User: {},
+        User: null,
         Token: "",
         status: '',
+        Authorized: false,
         total_sales: 0,
         updateTotalItems: 0,
-        onHold: 0
+        onHold: 0,
+        yearSales: []
     },
     reducers: {
         updateTotal: (state, { payload }) => {
@@ -86,6 +108,17 @@ export const mainSlice = createSlice({
         },
         resetHold: (state, action) => {
             state.onHold = 0
+        },
+        updateYearlySales: (state, { payload }) => {
+            state.yearSales.push(payload)
+        },
+        resetYearSales: (state, { payload }) => {
+            state.yearSales = []
+        },
+        logout: (state, { payload }) => {
+            state.Token = ''
+            state.User = null
+            state.Authorized = false
         }
     },
     extraReducers: {
@@ -96,11 +129,15 @@ export const mainSlice = createSlice({
             state.status = 'loading'
         },
         [login.fulfilled]: (state, { payload }) => {
-            let { User, Token } = payload
-            state.User = User
-            state.Token = Token
-            state.status = "success"
-            localStorage.setItem('Token', Token)
+            if (payload) {
+                let { User, Token } = payload
+                state.User = User
+                state.Token = Token
+                state.status = "success"
+                localStorage.setItem('Token', Token)
+                localStorage.setItem('id', User.id)
+                state.Authorized = true
+            }
         },
         [login.rejected]: (state, action) => {
             state.status = 'failed'
@@ -118,6 +155,8 @@ export const mainSlice = createSlice({
                 state.Token = Token
                 state.status = "success"
                 localStorage.setItem('Token', Token)
+                localStorage.setItem('id', User.id)
+                state.Authorized = true
             }
 
         },
@@ -125,6 +164,7 @@ export const mainSlice = createSlice({
             state.status = 'failed'
         },
 
+        //? geting  Store reports  : 
 
         [getStoreReports.pending]: (state, action) => {
             state.status = 'loading'
@@ -136,9 +176,52 @@ export const mainSlice = createSlice({
             state.status = 'failed'
         },
 
+        //? Editing User Infos : 
+
+        [editProfile.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [editProfile.fulfilled]: (state, { payload }) => {
+            state.User = payload
+        },
+        [editProfile.rejected]: (state, action) => {
+            state.status = 'failed'
+        },
+
+        //? geting User Data : 
+
+        [getUserData.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [getUserData.fulfilled]: (state, { payload }) => {
+            state.User = payload
+        },
+        [getUserData.rejected]: (state, action) => {
+            state.status = 'failed'
+        },
+
+        //? verifyToken Token : 
+
+        [verifyToken.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [verifyToken.fulfilled]: (state, { payload }) => {
+            if (payload.message) {
+                state.Authorized = true
+                state.Token = localStorage.getItem('Token')
+            } else if (payload.error) {
+                state.Authorized = false
+                state.Token = ''
+                localStorage.removeItem('Token')
+                localStorage.removeItem('id')
+            }
+        },
+        [verifyToken.rejected]: (state, action) => {
+            state.status = 'failed'
+        },
     },
 })
 
 
-export const { updateTotal, resetTotal, updateTotalItems, resetItems, resetHold } = mainSlice.actions;
+export const { updateTotal, resetTotal, updateTotalItems, resetItems, resetHold, updateYearlySales, resetYearSales, logout } = mainSlice.actions;
 export default mainSlice.reducer;

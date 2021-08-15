@@ -46,9 +46,11 @@ export default function RightSidebar() {
     const [addStore, setAddStore] = useState({})
 
     const stores = useSelector(state => state.stores)
+    const main = useSelector(state => state.main)
     const dispatch = useDispatch();
     const classes = useStyles();
     const location = useLocation()
+
 
     const getOrdersInit = (store) => {
         dispatch(getOrders(store))
@@ -58,7 +60,7 @@ export default function RightSidebar() {
 
 
     const getStores = async () => {
-        let response = await fetch(`http://127.0.0.1:80/falc0n/store/stores`, {
+        let response = await fetch(`http://127.0.0.1:80/falc0n/store/stores/${main.User.id}`, {
             method: "GET",
             headers: {
                 'Content-type': "application/json"
@@ -80,7 +82,7 @@ export default function RightSidebar() {
     }
 
     const connect = async () => {
-        let owner = 1
+        let owner = main.User?.id
         let newStore = {
             store_name: addStore.name,
             url: addStore.url,
@@ -129,7 +131,7 @@ export default function RightSidebar() {
                 </button>
                 <div class="profile-box">
                     <div class="profile-photo-wrapper">
-                        <img src="https://media-exp3.licdn.com/dms/image/C4E03AQHyxAeVB5tRqQ/profile-displayphoto-shrink_200_200/0/1616788381572?e=1631750400&v=beta&t=ZQUb7jr9HKfWe_EiiJvZjW_aaYfPD_c-ARDFP-0RB7Y"
+                        <img src={main.User?.image}
                             alt="profile" />
                     </div>
                     <p class="profile-text">YOUSSEF EL BAKKOURI</p>

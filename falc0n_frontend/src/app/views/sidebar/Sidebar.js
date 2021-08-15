@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import {
     Link
 } from "react-router-dom";
+import { logout } from '../main/mainSlice';
 import {
     sidebarState,
     updateName,
@@ -16,7 +17,7 @@ export function Sidebar() {
     const sidebar = useSelector(state => state.sidebar)
     const dispatch = useDispatch();
     const location = useLocation()
-
+    const history = useHistory()
     const [pages, setPages] = useState([
         "DASHBOARD",
         "STORES",
@@ -44,6 +45,13 @@ export function Sidebar() {
     useEffect(() => {
         sidebar.show.payload ? document.querySelector('.app-left').classList.add('show') : document.querySelector('.app-left').classList.remove('show')
     }, [sidebar.show]);
+
+    const logOut = () => {
+        localStorage.removeItem('Token')
+        localStorage.removeItem('id')
+        dispatch(logout())
+        history.push('/auth')
+    }
 
 
 
@@ -137,6 +145,17 @@ export function Sidebar() {
                 </li>
 
             </ul>
+            <div className='logout' onClick={() => logOut()} >
+                <small>LOG OUT</small>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+
+            </div>
         </div>
     )
 }

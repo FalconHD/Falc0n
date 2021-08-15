@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Chart from 'chart.js/auto';
 import StoreReports from '../../components/StoreReports';
 import { addStatus } from '../stores/storesSlice';
+import { verifyToken } from '../main/mainSlice';
+import { Redirect } from 'react-router-dom';
 const RightSidebar = React.lazy(() => import('../../components/RightSidebar'));
 const OrderTable = React.lazy(() => import('../../components/OrderTable'));
 
@@ -13,11 +15,22 @@ const OrderTable = React.lazy(() => import('../../components/OrderTable'));
 
 export function Orders() {
     const stores = useSelector(state => state.stores)
-    const dispatch = useDispatch();
     const [products, setProducts] = useState([])
     const [reportsSales, setReportsSales] = useState([])
     const [orders, setOrders] = useState([])
     const [total, setTotal] = useState([])
+    const [isAuthenticated, setisAuthenticated] = useState(true)
+    const main = useSelector(state => state.main)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (main.Authorized) {
+            setisAuthenticated(true)
+        } else {
+            dispatch(verifyToken(localStorage.getItem("Token")))
+            setisAuthenticated(false)
+        }
+    }, [main.Authorized])
 
     useEffect(() => {
         setProducts(stores.selectedStore.products)
@@ -171,6 +184,7 @@ export function Orders() {
 
     return (
         <div class="stores-pages">
+            {isAuthenticated ? null : <Redirect to='auth'/>}
             <div className="app-main">
                 <TopHeader />
                 <StoreReports />
@@ -191,7 +205,7 @@ export function Orders() {
                     </div>
                 </div>
 
-                <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px" ,minWidth: "500px" }}>
+                <div className="chart-container" style={{ color: 'white', display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: "10px", minWidth: "500px" }}>
                     <Suspense fallback={<div>Loading...</div>}>
                         <OrderTable getMonthlyReports={getMonthlyReports} getYearlyReports={getYearlyReports} />
                     </Suspense>
