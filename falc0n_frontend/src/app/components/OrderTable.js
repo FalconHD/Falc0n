@@ -17,6 +17,8 @@ const status = [
     'processing',
     'cancelled',
     'completed',
+    'refunded',
+    'pending'
 ]
 
 const useStyles = makeStyles((theme) => ({
